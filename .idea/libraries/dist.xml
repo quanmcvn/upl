@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="dist">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/jflex-full-1.9.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/Compiler.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/java-cup-11b-runtime.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
