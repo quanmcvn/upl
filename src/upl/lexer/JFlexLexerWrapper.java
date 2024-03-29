@@ -13,14 +13,17 @@ public class JFlexLexerWrapper implements ILexer {
 	}
 	@Override
 	public List<Token> scanTokens() {
-		int status=1;
-		do {
+		List<Token> tokenList = new ArrayList<>();
+		while (true) {
 			try {
-				status=jFlexLexer.yylex();
+				Token lastToken = jFlexLexer.yylex();
+				if (lastToken == null) continue;
+				if (lastToken.type == TokenType.EOF) break;
+				tokenList.add(lastToken);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
-		} while(status==0);
-		return new ArrayList<>();
+		};
+		return tokenList;
 	}
 }

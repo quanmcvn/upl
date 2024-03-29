@@ -1,18 +1,19 @@
 package upl.lexer;
 
+import upl.Main;
+import static upl.lexer.TokenType.*;
 
 %%
-%type int
+%type Token
 %line
 %column
 %char
 %class JFlexLexer
 %{
-
-	
 %}
 %eofval{
-    System.out.println("EOF"); return 1;
+    System.out.println("EOF");
+	return new Token(EOF, "", yyline + 1);
 %eofval}
 
 InputCharacter = [^\r\n]
@@ -31,25 +32,30 @@ TraditionalComment   = "/*"~"*/"
 EndOfLineComment     = "//" {InputCharacter}*
 
 %%
-"begin" { System.out.println("<BEGIN, ''> "); return 0;}
-"end" { System.out.println("<END, ''> "); return 0;}
-"if" { System.out.println("<IF, ''> "); return 0;}
-"then" { System.out.println("<THEN, ''> "); return 0;}
-"else" { System.out.println("<ELSE, ''> "); return 0;}
-{TypeSpecifier} { System.out.printf("<Type, '%s'> \n", yytext()); return 0;}
-">" { System.out.println("<GT, ''> "); return 0; }
-">=" { System.out.println("<GTE, ''> "); return 0; }
-"==" { System.out.println("<EQUAL, ''> "); return 0; }
-"=" { System.out.println("<ASSIGN, ''> "); return 0; }
-"(" { System.out.println("<LEFTBRACKET, ''> "); return 0; }
-")" { System.out.println("<RIGHTBRACKET, ''> "); return 0; }
-"{" { System.out.println("<LEFTBRACE, ''> "); return 0; }
-"}" { System.out.println("<RIGHTBRACE, ''> "); return 0; }
-";" { System.out.println("<SEMI, ''> "); return 0; }
-"+" { System.out.println("<PLUS, ''> "); return 0;}
-"*" { System.out.println("<TIMES, ''> "); return 0;}
-{Identifier} { System.out.println("<ID, '" + yytext() + "'> "); return 0;}
-{Number} { System.out.println("<NUM, '" + yytext() + "'> "); return 0;}
+"begin" { return new Token(BEGIN, yytext(), yyline + 1); }
+"end" { return new Token(END, yytext(), yyline + 1); }
+"if" { return new Token(IF, yytext(), yyline + 1); }
+"then" { return new Token(THEN, yytext(), yyline + 1); }
+"else" { return new Token(ELSE, yytext(), yyline + 1); }
+"print" { return new Token(PRINT, yytext(), yyline + 1); }
+{TypeSpecifier} { 
+	if (yytext().equals("int")) return new Token(INT, yytext(), yyline + 1); 
+	else if (yytext().equals("bool")) return new Token(BOOL, yytext(), yyline + 1); 
+	Main.error(yyline + 1, yycolumn,"Unexpected " + yytext()); System.exit(1);
+}
+">" { return new Token(GREATER, yytext(), yyline + 1);  }
+">=" { return new Token(GREATER_EQUAL, yytext(), yyline + 1);  }
+"==" { return new Token(EQUAL_EQUAL, yytext(), yyline + 1);  }
+"=" { return new Token(EQUAL, yytext(), yyline + 1);  }
+"(" { return new Token(LEFT_PAREN, yytext(), yyline + 1);  }
+")" { return new Token(RIGHT_PAREN, yytext(), yyline + 1);  }
+"{" { return new Token(LEFT_BRACE, yytext(), yyline + 1);  }
+"}" { return new Token(RIGHT_BRACE, yytext(), yyline + 1);  }
+";" { return new Token(SEMICOLON, yytext(), yyline + 1); }
+"+" { return new Token(PLUS, yytext(), yyline + 1); }
+"*" { return new Token(STAR, yytext(), yyline + 1); }
+{Identifier} { return new Token(IDENTIFIER, yytext(), yyline + 1);}
+{Number} { return new Token(NUMBER, yytext(), yyline + 1);}
 {WhiteSpace} { /* ignore white space. */ }
 {Comment} { System.out.printf("Comment: %s\n", yytext()); }
-. { System.out.println("Illegal character: '"+yytext()+ "' at " + (yyline + 1) + ":" + (yycolumn)); }
+. { Main.error(yyline + 1, yycolumn,"Unexpected " + yytext()); return null; }

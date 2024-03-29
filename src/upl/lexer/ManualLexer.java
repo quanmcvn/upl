@@ -109,7 +109,6 @@ public class ManualLexer implements ILexer {
 					comment.append(consume());
 				} else {
 					Main.error(line, current - currentStartOfLine,"Unexpected /");
-					System.exit(1);
 					break;
 				}
 				System.out.printf("Got comment: %s\n", comment);
@@ -134,7 +133,6 @@ public class ManualLexer implements ILexer {
 					identifier();
 				} else {
 					Main.error(line, current - currentStartOfLine, String.format("Unexpected %c", c));
-					System.exit(1);
 				}
 		}
 	}

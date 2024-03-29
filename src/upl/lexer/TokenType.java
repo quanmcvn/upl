@@ -15,4 +15,7 @@ enum TokenType {
 	// Keywords.
 	BEGIN, END, IF, THEN, ELSE, DO, WHILE, PRINT,
 	INT, BOOL,
+
+	// EOF
+	EOF
 }
