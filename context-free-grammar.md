@@ -19,7 +19,7 @@ $$
 
 $$ IfThenElseStatement \rightarrow IfThen \ MaybeElse $$
 
-$$ IfThen \rightarrow \textbf{if (} \ Expression \ \textbf{) then \{} \ Statements \ \textbf{\}} $$
+$$ IfThen \rightarrow \textbf{if} \ Expression \ \textbf{then \{} \ Statements \ \textbf{\}} $$
 
 $$ MaybeElse \rightarrow \begin{equation*} \begin{aligned}
 & \epsilon \\
