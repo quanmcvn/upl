@@ -32,7 +32,13 @@ $$ DoWhileStatement \rightarrow \textbf{do \{} \ Statements \ \textbf{\} while (
 
 $$ PrintStatement \rightarrow \textbf{print (} \ Expression \ \textbf{) ;}  $$
 
-$$ DeclarationStatement \rightarrow \boldsymbol{TypeSpecifier} \ InitDeclarator \ \textbf{;} $$
+$$ DeclarationStatement \rightarrow TypeSpecifier \ InitDeclarator \ \textbf{;} $$
+
+$$ TypeSpecifier \rightarrow \begin{equation*} \begin{aligned}
+& \textbf{int} \\
+& \textbf{bool} \\
+\end{aligned} \end{equation*}
+$$
 
 $$ AssignmentStatement \rightarrow \boldsymbol{Identifier} \ \boldsymbol{=} \ Expression \ \textbf{;} $$
 
