@@ -1,5 +1,6 @@
 begin
-	2x;
+	$$$$$
+	$$$$$
 	int x;
 	int y=x+1;
 	/*	comments
@@ -23,6 +24,7 @@ begin
 	if x>=a then{
 	x=x+1;
 }
+	bool b;
 	bool x=a==b;
 	do{
 		int b=1;

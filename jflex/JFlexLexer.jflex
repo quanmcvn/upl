@@ -12,8 +12,7 @@ import static upl.lexer.TokenType.*;
 %{
 %}
 %eofval{
-    System.out.println("EOF");
-	return new Token(EOF, "", yyline + 1);
+	return new Token(EOF, "", null, yyline + 1);
 %eofval}
 
 InputCharacter = [^\r\n]
@@ -32,30 +31,30 @@ TraditionalComment   = "/*"~"*/"
 EndOfLineComment     = "//" {InputCharacter}*
 
 %%
-"begin" { return new Token(BEGIN, yytext(), yyline + 1); }
-"end" { return new Token(END, yytext(), yyline + 1); }
-"if" { return new Token(IF, yytext(), yyline + 1); }
-"then" { return new Token(THEN, yytext(), yyline + 1); }
-"else" { return new Token(ELSE, yytext(), yyline + 1); }
-"print" { return new Token(PRINT, yytext(), yyline + 1); }
+"begin" { return new Token(BEGIN, yytext(), null, yyline + 1); }
+"end" { return new Token(END, yytext(), null, yyline + 1); }
+"if" { return new Token(IF, yytext(), null, yyline + 1); }
+"then" { return new Token(THEN, yytext(), null, yyline + 1); }
+"else" { return new Token(ELSE, yytext(), null, yyline + 1); }
+"print" { return new Token(PRINT, yytext(), null, yyline + 1); }
 {TypeSpecifier} { 
-	if (yytext().equals("int")) return new Token(INT, yytext(), yyline + 1); 
-	else if (yytext().equals("bool")) return new Token(BOOL, yytext(), yyline + 1); 
-	Main.error(yyline + 1, yycolumn,"Unexpected " + yytext()); System.exit(1);
+	if (yytext().equals("int")) return new Token(INT, yytext(), null, yyline + 1);
+	else if (yytext().equals("bool")) return new Token(BOOL, yytext(), null, yyline + 1);
+	Main.error(yyline + 1, yycolumn, "Unexpected " + yytext()); System.exit(1);
 }
-">" { return new Token(GREATER, yytext(), yyline + 1);  }
-">=" { return new Token(GREATER_EQUAL, yytext(), yyline + 1);  }
-"==" { return new Token(EQUAL_EQUAL, yytext(), yyline + 1);  }
-"=" { return new Token(EQUAL, yytext(), yyline + 1);  }
-"(" { return new Token(LEFT_PAREN, yytext(), yyline + 1);  }
-")" { return new Token(RIGHT_PAREN, yytext(), yyline + 1);  }
-"{" { return new Token(LEFT_BRACE, yytext(), yyline + 1);  }
-"}" { return new Token(RIGHT_BRACE, yytext(), yyline + 1);  }
-";" { return new Token(SEMICOLON, yytext(), yyline + 1); }
-"+" { return new Token(PLUS, yytext(), yyline + 1); }
-"*" { return new Token(STAR, yytext(), yyline + 1); }
-{Identifier} { return new Token(IDENTIFIER, yytext(), yyline + 1);}
-{Number} { return new Token(NUMBER, yytext(), yyline + 1);}
-{WhiteSpace} { /* ignore white space. */ }
-{Comment} { System.out.printf("Comment: %s\n", yytext()); }
+">" { return new Token(GREATER, yytext(), null, yyline + 1);  }
+">=" { return new Token(GREATER_EQUAL, yytext(), null, yyline + 1);  }
+"==" { return new Token(EQUAL_EQUAL, yytext(), null, yyline + 1);  }
+"=" { return new Token(EQUAL, yytext(), null, yyline + 1);  }
+"(" { return new Token(LEFT_PAREN, yytext(), null, yyline + 1);  }
+")" { return new Token(RIGHT_PAREN, yytext(), null, yyline + 1);  }
+"{" { return new Token(LEFT_BRACE, yytext(), null, yyline + 1);  }
+"}" { return new Token(RIGHT_BRACE, yytext(), null, yyline + 1);  }
+";" { return new Token(SEMICOLON, yytext(), null, yyline + 1); }
+"+" { return new Token(PLUS, yytext(), null, yyline + 1); }
+"*" { return new Token(STAR, yytext(), null, yyline + 1); }
+{Identifier} { return new Token(IDENTIFIER, yytext(), null, yyline + 1);}
+{Number} { return new Token(NUMBER, yytext(), Integer.parseInt(yytext()), yyline + 1);}
+{WhiteSpace} { /* ignore white space. */ return null; }
+{Comment} { /* System.out.printf("Comment: %s\n", yytext()); */ return null; }
 . { Main.error(yyline + 1, yycolumn,"Unexpected " + yytext()); return null; }

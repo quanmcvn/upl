@@ -18,12 +18,12 @@ public class JFlexLexerWrapper implements ILexer {
 			try {
 				Token lastToken = jFlexLexer.yylex();
 				if (lastToken == null) continue;
-				if (lastToken.type == TokenType.EOF) break;
 				tokenList.add(lastToken);
+				if (lastToken.type == TokenType.EOF) break;
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
-		};
+		}
 		return tokenList;
 	}
 }

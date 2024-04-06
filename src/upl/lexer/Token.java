@@ -1,13 +1,15 @@
 package upl.lexer;
 
 public class Token {
-	final TokenType type;
-	final String lexeme;
-	final int line;
+	public final TokenType type;
+	public final String lexeme;
+	public final Object value;
+	public final int line;
 	
-	public Token(TokenType type, String lexeme, int line) {
+	public Token(TokenType type, String lexeme, Object value, int line) {
 		this.type = type;
 		this.lexeme = lexeme;
+		this.value = value;
 		this.line = line;
 	}
 	

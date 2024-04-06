@@ -58,13 +58,18 @@ public class ManualLexer implements ILexer {
 		if (isAtEnd()) return false;
 		if (source.charAt(current) != expected) return false;
 		
-		current++;
+		consume();
 		return true;
 	}
 	
 	private void addToken(TokenType type) {
+		addToken(type, null);
+	}
+	
+	private void addToken(TokenType type, Object value) {
 		String text = source.substring(start, current);
-		tokens.add(new Token(type, text, line));
+		tokens.add(new Token(type, text, value, line));
+		
 	}
 	private boolean isDigit(char c) {
 		return c >= '0' && c <= '9';
@@ -81,6 +86,8 @@ public class ManualLexer implements ILexer {
 			start = current;
 			scanToken();
 		}
+		
+		addToken(EOF);
 		
 		return tokens;
 	}
@@ -111,7 +118,7 @@ public class ManualLexer implements ILexer {
 					Main.error(line, current - currentStartOfLine,"Unexpected /");
 					break;
 				}
-				System.out.printf("Got comment: %s\n", comment);
+//				System.out.printf("Got comment: %s\n", comment);
 				break;
 			}
 			case '=':
@@ -139,7 +146,7 @@ public class ManualLexer implements ILexer {
 	
 	private void number() {
 		while (isDigit(peek())) consume();
-		addToken(NUMBER);
+		addToken(NUMBER, Integer.parseInt(source.substring(start, current)));
 	}
 	
 	private void identifier() {
