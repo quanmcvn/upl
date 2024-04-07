@@ -1,7 +1,6 @@
 package upl.parser;
 
 import upl.CompileTimeError;
-import upl.Main;
 import upl.lexer.Token;
 import upl.lexer.TokenType;
 import upl.parser.expression.*;
@@ -25,23 +24,27 @@ public class Parser {
 	}
 	
 	public Statements parse() {
-		consume(BEGIN, "'begin' expected at the beginning");
-		List<Statement> statements = new ArrayList<>();
-		while (!check(END) &&!isAtEnd()) {
-			statements.add(statement());
+		try {
+			consume(BEGIN, "expected a 'begin'");
+			List<Statement> statements = new ArrayList<>();
+			while (!check(END) && !isAtEnd()) {
+				statements.add(statement());
+			}
+			consume(END, "expected and 'end'");
+			return new Statements(statements);
+		} catch (CompileTimeError e) {
+			return null;
 		}
-		consume(END, "'end' expected at the beginning");
-		return new Statements(statements);
 	}
 	
 	private Statements block() {
-		consume(LEFT_BRACE, "Expect '{' at the begin of a block");
+		consume(LEFT_BRACE, "expect a '{' at the begin of a block");
 		environment = new Environment(environment);
 		List<Statement> statements = new ArrayList<>();
 		while (!check(RIGHT_BRACE) && !isAtEnd()) {
 			statements.add(statement());
 		}
-		consume(RIGHT_BRACE, "Expect '}' after block.");
+		consume(RIGHT_BRACE, "Expect a '}' after block.");
 		environment = environment.enclosing;
 		return new Statements(statements);
 	}
@@ -53,21 +56,22 @@ public class Parser {
 			if (check(PRINT)) return printStatement();
 			if (check(INT) || check(BOOL)) return declarationStatement();
 			if (check(IDENTIFIER)) return assignmentStatement();
-			throw error(peek(), "Not in current language. Maybe missing 'end'?");
+			throw error(peek(), "expected a statement");
 		} catch (CompileTimeError e) {
 			skipUntilNextStatement();
 			return null;
 		}
+		
+//		return null;
 	}
 	
 	private IfThenElse ifThenElseStatement() {
-		consume(IF, "Expected 'if'"); // never happen, just for extra safety
+		consume(IF, "expected a 'if'"); // never happen, just for extra safety
 //		consume(LEFT_PAREN, "Expected '(' after 'if'");
 		Expression expression = expression();
 //		consume(RIGHT_PAREN, "Expected ')' after if condition");
 		
-		consume(THEN, "Expected 'then' after if condition");
-		
+		consume(THEN, "expected a 'then' after if condition");
 		
 		Statements thenBranch = block();
 		Statements elseBranch = null;
@@ -79,37 +83,37 @@ public class Parser {
 	}
 	
 	private DoWhile doWhileStatement() {
-		consume(DO, "Expected 'do'"); // never happen, just for extra safety
+		consume(DO, "expected 'do'"); // never happen, just for extra safety
 		Statements statements = block();
-		consume(WHILE, "Expected 'while' after do {}");
-		consume(LEFT_PAREN, "Expected '(' after 'while'");
+		consume(WHILE, "expected a 'while' after do {}");
+		consume(LEFT_PAREN, "expected a '(' after 'while'");
 		Expression expression = expression();
-		consume(RIGHT_PAREN, "Expected ')' after while condition");
-		consume(SEMICOLON, "Expected ';' after while ()");
+		consume(RIGHT_PAREN, "expected a ')' after while condition");
+		consume(SEMICOLON, "expected a ';' after while ()");
 		
 		return new DoWhile(statements, expression);
 	}
 	
 	private Print printStatement() {
-		consume(PRINT, "Expected 'print'"); // never happen, just for extra safety
-		consume(LEFT_PAREN, "Expected '(' after 'print'");
+		consume(PRINT, "expected a 'print'"); // never happen, just for extra safety
+		consume(LEFT_PAREN, "expected a '(' after 'print'");
 		Expression expression = expression();
-		consume(RIGHT_PAREN, "Expected ')' after print expression");
-		consume(SEMICOLON, "Expected ';' after print ()");
+		consume(RIGHT_PAREN, "expected a ')' after print expression");
+		consume(SEMICOLON, "expected a ';' after print ()");
 		
 		return new Print(expression);
 	}
 	
 	private Declaration declarationStatement() {
 		Token type = advance();
-		Token identifier = consume(IDENTIFIER, "Expected identifier (declaration)");
+		Token identifier = consume(IDENTIFIER, "expected an identifier (declaration)");
 		
 		Expression initializer = null;
 		if (match(EQUAL)) {
 			initializer = expression();
 		}
 		
-		consume(SEMICOLON, "Expected ';'");
+		consume(SEMICOLON, "expected a ';'");
 		
 		Variable variable = new Variable(type, identifier);
 		
@@ -119,11 +123,11 @@ public class Parser {
 	}
 	
 	private Assignment assignmentStatement() {
-		Token identifier = consume(IDENTIFIER, "Expected identifier (assignment)");
+		Token identifier = consume(IDENTIFIER, "expected an identifier (assignment)");
 		Variable variable = new Variable(environment.get(identifier).type, identifier);
-		consume(EQUAL, "Expected '='");
+		consume(EQUAL, "expected a '='");
 		Expression expression = expression();
-		consume(SEMICOLON, "Expected ';'");
+		consume(SEMICOLON, "expected a ';'");
 		
 		return new Assignment(variable, expression);
 	}
@@ -199,11 +203,11 @@ public class Parser {
 		
 		if (match(LEFT_PAREN)) {
 			Expression expression = expression();
-			consume(RIGHT_PAREN, "Expect ')' after expression.");
+			consume(RIGHT_PAREN, "expect a ')' after expression.");
 			return new Grouping(expression);
 		}
 		
-		throw error(peek(), "Expect an expression.");
+		throw error(peek(), "expect an expression.");
 	}
 	
 	private boolean match(TokenType... types) {
@@ -246,10 +250,11 @@ public class Parser {
 	}
 	
 	private void skipUntilNextStatement() {
-		advance();
-		
 		while (!isAtEnd()) {
-			if (previous().type == SEMICOLON) return;
+			if (peek().type == SEMICOLON) {
+				advance();
+				return;
+			}
 			
 			switch (peek().type) {
 				case INT:
@@ -257,6 +262,9 @@ public class Parser {
 				case IF:
 				case WHILE:
 				case PRINT:
+				case LEFT_BRACE:
+				case RIGHT_BRACE:
+				case END:
 					return;
 			}
 			

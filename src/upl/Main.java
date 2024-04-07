@@ -24,11 +24,15 @@ public class Main{
 	}
 	
 	public static void main(String[] args) throws Exception{
+		if (args.length == 0) {
+			System.err.println("Missing input file.");
+			System.exit(1);
+		}
 		Lexer lexer;
 		if (args.length == 1) {
 			lexer = new Lexer(new InputStreamReader(new java.io.FileInputStream(args[0])), true);
 		} else {
-			lexer = new Lexer(new InputStreamReader(new java.io.FileInputStream(args[0])), Boolean.valueOf(args[1]));
+			lexer = new Lexer(new InputStreamReader(new java.io.FileInputStream(args[0])), Boolean.parseBoolean(args[1]));
 		}
 		
 		List<Token> tokens = lexer.getTokens();

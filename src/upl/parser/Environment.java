@@ -32,12 +32,17 @@ public class Environment {
 			return values.get(name.lexeme);
 		}
 		if (enclosing != null) return enclosing.get(name);
-		throw new CompileTimeError(name, String.format("Identifier %s is undefined.", name.lexeme));
+		throw new CompileTimeError(name, String.format("identifier \"%s\" is undefined", name.lexeme));
 	}
 	
 	void define(Token name, EnvironmentEntry entry) {
-		if (values.containsKey(name)) {
-			throw new CompileTimeError(name, String.format("Redeclaration of %s.", name.lexeme));
+		if (values.containsKey(name.lexeme)) {
+			EnvironmentEntry prev = values.get(name.lexeme);
+			if (prev.type.lexeme.equals(entry.type.lexeme)) {
+				throw new CompileTimeError(name, String.format("redeclaration of \"%s %s\"\nnote: previously declare at line %d", entry.type.lexeme, name.lexeme, prev.type.line));
+			} else {
+				throw new CompileTimeError(name, String.format("conflicting declaration of \"%s %s\"\nnote: previously declare as \"%s %s\" at line %d",  entry.type.lexeme, name.lexeme, prev.type.lexeme, name.lexeme, prev.type.line));
+			}
 		}
 		values.put(name.lexeme, entry);
 	}
@@ -56,7 +61,7 @@ public class Environment {
 	public String toString() {
 		String result = values.toString();
 		if (enclosing != null) {
-			result += " -> " + enclosing.toString();
+			result += " -> " + enclosing;
 		}
 		
 		return result;

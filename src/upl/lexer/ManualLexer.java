@@ -87,7 +87,7 @@ public class ManualLexer implements ILexer {
 			scanToken();
 		}
 		
-		addToken(EOF);
+		tokens.add(new Token(EOF, "EOF", null, line));
 		
 		return tokens;
 	}
