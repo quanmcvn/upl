@@ -1,7 +1,7 @@
 <h2> UPL </h2>
 A compiler for UPL (Uet Programming Language), a custom-made programming language
 
-Only has scanner currently
+Has scanner and parser (to AST) currently
 
 <h2>Usage</h2>
 
@@ -18,7 +18,7 @@ $ ant run-manual
 These runs will take input as file `input.upl` by default.
 You can change it by adding `-Dinput=<yourfile>`, eg `ant run -Dinput=input2.upl`
 
-Output: A list of tokens in the form of <TOKEN_TYPE, 'lexeme'>
+Output: Parsed AST in prefix notation
 
 <h2>Grammar</h2>
 

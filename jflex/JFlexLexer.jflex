@@ -37,7 +37,9 @@ EndOfLineComment     = "//" {InputCharacter}*
 "then" { return new Token(THEN, yytext(), null, yyline + 1); }
 "else" { return new Token(ELSE, yytext(), null, yyline + 1); }
 "print" { return new Token(PRINT, yytext(), null, yyline + 1); }
-{TypeSpecifier} { 
+"do" { return new Token(DO, yytext(), null, yyline + 1); }
+"while" { return new Token(WHILE, yytext(), null, yyline + 1); }
+{TypeSpecifier} {
 	if (yytext().equals("int")) return new Token(INT, yytext(), null, yyline + 1);
 	else if (yytext().equals("bool")) return new Token(BOOL, yytext(), null, yyline + 1);
 	Main.error(yyline + 1, yycolumn, "Unexpected " + yytext()); System.exit(1);

@@ -69,8 +69,8 @@ class JFlexLexer {
     "\1\0\1\13\1\0\1\14\1\15\2\0\32\16\6\0"+
     "\1\16\1\17\1\16\1\20\1\21\1\22\1\23\1\24"+
     "\1\25\2\16\1\26\1\16\1\27\1\30\1\31\1\16"+
-    "\1\32\1\33\1\34\6\16\1\35\1\0\1\36\7\0"+
-    "\1\3\u01a2\0\2\3\326\0\u0100\3";
+    "\1\32\1\33\1\34\2\16\1\35\3\16\1\36\1\0"+
+    "\1\37\7\0\1\3\u01a2\0\2\3\326\0\u0100\3";
 
   private static int [] zzUnpackcmap_blocks() {
     int [] result = new int[1024];
@@ -98,13 +98,13 @@ class JFlexLexer {
 
   private static final String ZZ_ACTION_PACKED_0 =
     "\1\0\1\1\2\2\1\3\1\4\1\5\1\6\1\1"+
-    "\1\7\1\10\1\11\1\12\6\13\1\14\1\15\1\0"+
-    "\1\16\1\17\1\20\5\13\1\21\3\13\1\0\3\13"+
-    "\1\22\1\23\2\13\1\16\1\13\1\24\1\13\1\25"+
-    "\1\26\1\27";
+    "\1\7\1\10\1\11\1\12\10\13\1\14\1\15\1\0"+
+    "\1\16\1\17\1\20\3\13\1\21\2\13\1\22\4\13"+
+    "\1\0\3\13\1\23\1\24\3\13\1\16\1\13\1\25"+
+    "\1\13\1\26\1\13\1\27\1\30\1\31";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[49];
+    int [] result = new int[56];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -129,16 +129,16 @@ class JFlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\37\0\37\0\76\0\37\0\37\0\37\0\37"+
-    "\0\135\0\174\0\37\0\233\0\272\0\331\0\370\0\u0117"+
-    "\0\u0136\0\u0155\0\u0174\0\37\0\37\0\u0193\0\u01b2\0\37"+
-    "\0\37\0\u01d1\0\u01f0\0\u020f\0\u022e\0\u024d\0\331\0\u026c"+
-    "\0\u028b\0\u02aa\0\u02c9\0\u02e8\0\u0307\0\u0326\0\331\0\331"+
-    "\0\u0345\0\u0364\0\37\0\u0383\0\331\0\u03a2\0\331\0\331"+
-    "\0\331";
+    "\0\0\0\40\0\40\0\100\0\40\0\40\0\40\0\40"+
+    "\0\140\0\200\0\40\0\240\0\300\0\340\0\u0100\0\u0120"+
+    "\0\u0140\0\u0160\0\u0180\0\u01a0\0\u01c0\0\40\0\40\0\u01e0"+
+    "\0\u0200\0\40\0\40\0\u0220\0\u0240\0\u0260\0\340\0\u0280"+
+    "\0\u02a0\0\340\0\u02c0\0\u02e0\0\u0300\0\u0320\0\u0340\0\u0360"+
+    "\0\u0380\0\u03a0\0\340\0\340\0\u03c0\0\u03e0\0\u0400\0\40"+
+    "\0\u0420\0\340\0\u0440\0\340\0\u0460\0\340\0\340\0\340";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[49];
+    int [] result = new int[56];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -162,30 +162,35 @@ class JFlexLexer {
 
   private static final String ZZ_TRANS_PACKED_0 =
     "\1\2\2\3\1\0\1\4\1\5\1\6\1\7\1\10"+
-    "\1\11\1\12\1\13\1\14\1\15\1\16\1\17\1\16"+
-    "\1\20\3\16\1\21\3\16\1\22\2\16\1\23\1\24"+
-    "\1\25\41\0\1\3\43\0\1\26\1\0\1\27\37\0"+
-    "\1\12\40\0\1\30\36\0\1\31\34\0\1\32\3\0"+
-    "\17\16\14\0\1\32\3\0\3\16\1\33\6\16\1\34"+
-    "\4\16\14\0\1\32\3\0\10\16\1\35\1\36\5\16"+
-    "\14\0\1\32\3\0\4\16\1\37\4\16\1\40\5\16"+
-    "\14\0\1\32\3\0\14\16\1\41\2\16\14\0\1\32"+
-    "\3\0\6\16\1\42\10\16\2\0\7\26\1\43\27\26"+
-    "\2\27\1\0\1\27\1\0\32\27\12\0\1\32\36\0"+
-    "\1\32\3\0\5\16\1\44\11\16\14\0\1\32\3\0"+
-    "\12\16\1\45\4\16\14\0\1\32\3\0\15\16\1\46"+
-    "\1\16\14\0\1\32\3\0\2\16\1\47\14\16\14\0"+
-    "\1\32\3\0\16\16\1\50\14\0\1\32\3\0\7\16"+
-    "\1\51\7\16\14\0\1\32\3\0\3\16\1\52\13\16"+
-    "\2\0\7\26\1\43\1\26\1\53\25\26\12\0\1\32"+
-    "\3\0\7\16\1\54\7\16\14\0\1\32\3\0\10\16"+
-    "\1\50\6\16\14\0\1\32\3\0\3\16\1\55\13\16"+
-    "\14\0\1\32\3\0\11\16\1\56\5\16\14\0\1\32"+
-    "\3\0\11\16\1\57\5\16\14\0\1\32\3\0\11\16"+
-    "\1\60\5\16\14\0\1\32\3\0\16\16\1\61\2\0";
+    "\1\11\1\12\1\13\1\14\1\15\1\16\1\17\1\20"+
+    "\1\21\3\16\1\22\3\16\1\23\2\16\1\24\1\25"+
+    "\1\26\1\27\42\0\1\3\44\0\1\30\1\0\1\31"+
+    "\40\0\1\12\41\0\1\32\37\0\1\33\35\0\1\34"+
+    "\3\0\20\16\14\0\1\34\3\0\3\16\1\35\6\16"+
+    "\1\36\5\16\14\0\1\34\3\0\12\16\1\37\5\16"+
+    "\14\0\1\34\3\0\10\16\1\40\1\41\6\16\14\0"+
+    "\1\34\3\0\4\16\1\42\4\16\1\43\6\16\14\0"+
+    "\1\34\3\0\14\16\1\44\3\16\14\0\1\34\3\0"+
+    "\6\16\1\45\11\16\14\0\1\34\3\0\6\16\1\46"+
+    "\11\16\2\0\7\30\1\47\30\30\2\31\1\0\1\31"+
+    "\1\0\33\31\12\0\1\34\37\0\1\34\3\0\5\16"+
+    "\1\50\12\16\14\0\1\34\3\0\12\16\1\51\5\16"+
+    "\14\0\1\34\3\0\15\16\1\52\2\16\14\0\1\34"+
+    "\3\0\2\16\1\53\15\16\14\0\1\34\3\0\16\16"+
+    "\1\54\1\16\14\0\1\34\3\0\7\16\1\55\10\16"+
+    "\14\0\1\34\3\0\3\16\1\56\14\16\14\0\1\34"+
+    "\3\0\7\16\1\57\10\16\2\0\7\30\1\47\1\30"+
+    "\1\60\26\30\12\0\1\34\3\0\7\16\1\61\10\16"+
+    "\14\0\1\34\3\0\10\16\1\54\7\16\14\0\1\34"+
+    "\3\0\3\16\1\62\14\16\14\0\1\34\3\0\11\16"+
+    "\1\63\6\16\14\0\1\34\3\0\11\16\1\64\6\16"+
+    "\14\0\1\34\3\0\10\16\1\65\7\16\14\0\1\34"+
+    "\3\0\11\16\1\66\6\16\14\0\1\34\3\0\16\16"+
+    "\1\67\1\16\14\0\1\34\3\0\3\16\1\70\14\16"+
+    "\2\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[961];
+    int [] result = new int[1152];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -228,11 +233,11 @@ class JFlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\2\11\1\1\4\11\2\1\1\11\10\1\2\11"+
-    "\1\0\1\1\2\11\11\1\1\0\7\1\1\11\6\1";
+    "\1\0\2\11\1\1\4\11\2\1\1\11\12\1\2\11"+
+    "\1\0\1\1\2\11\13\1\1\0\10\1\1\11\10\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[49];
+    int [] result = new int[56];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -728,119 +733,129 @@ class JFlexLexer {
             { Main.error(yyline + 1, yycolumn,"Unexpected " + yytext()); return null;
             }
           // fall through
-          case 24: break;
+          case 26: break;
           case 2:
-            { /* ignore white space. */
+            { /* ignore white space. */ return null;
             }
           // fall through
-          case 25: break;
+          case 27: break;
           case 3:
             { return new Token(LEFT_PAREN, yytext(), null, yyline + 1);
             }
           // fall through
-          case 26: break;
+          case 28: break;
           case 4:
             { return new Token(RIGHT_PAREN, yytext(), null, yyline + 1);
             }
           // fall through
-          case 27: break;
+          case 29: break;
           case 5:
             { return new Token(STAR, yytext(), null, yyline + 1);
             }
           // fall through
-          case 28: break;
+          case 30: break;
           case 6:
             { return new Token(PLUS, yytext(), null, yyline + 1);
             }
           // fall through
-          case 29: break;
+          case 31: break;
           case 7:
             { return new Token(NUMBER, yytext(), Integer.parseInt(yytext()), yyline + 1);
             }
           // fall through
-          case 30: break;
+          case 32: break;
           case 8:
             { return new Token(SEMICOLON, yytext(), null, yyline + 1);
             }
           // fall through
-          case 31: break;
+          case 33: break;
           case 9:
             { return new Token(EQUAL, yytext(), null, yyline + 1);
             }
           // fall through
-          case 32: break;
+          case 34: break;
           case 10:
             { return new Token(GREATER, yytext(), null, yyline + 1);
             }
           // fall through
-          case 33: break;
+          case 35: break;
           case 11:
             { return new Token(IDENTIFIER, yytext(), null, yyline + 1);
             }
           // fall through
-          case 34: break;
+          case 36: break;
           case 12:
             { return new Token(LEFT_BRACE, yytext(), null, yyline + 1);
             }
           // fall through
-          case 35: break;
+          case 37: break;
           case 13:
             { return new Token(RIGHT_BRACE, yytext(), null, yyline + 1);
             }
           // fall through
-          case 36: break;
+          case 38: break;
           case 14:
-            { System.out.printf("Comment: %s\n", yytext());
+            { /* System.out.printf("Comment: %s\n", yytext()); */ return null;
             }
           // fall through
-          case 37: break;
+          case 39: break;
           case 15:
             { return new Token(EQUAL_EQUAL, yytext(), null, yyline + 1);
             }
           // fall through
-          case 38: break;
+          case 40: break;
           case 16:
             { return new Token(GREATER_EQUAL, yytext(), null, yyline + 1);
             }
           // fall through
-          case 39: break;
+          case 41: break;
           case 17:
+            { return new Token(DO, yytext(), null, yyline + 1);
+            }
+          // fall through
+          case 42: break;
+          case 18:
             { return new Token(IF, yytext(), null, yyline + 1);
             }
           // fall through
-          case 40: break;
-          case 18:
+          case 43: break;
+          case 19:
             { return new Token(END, yytext(), null, yyline + 1);
             }
           // fall through
-          case 41: break;
-          case 19:
+          case 44: break;
+          case 20:
             { if (yytext().equals("int")) return new Token(INT, yytext(), null, yyline + 1);
 	else if (yytext().equals("bool")) return new Token(BOOL, yytext(), null, yyline + 1);
 	Main.error(yyline + 1, yycolumn, "Unexpected " + yytext()); System.exit(1);
             }
           // fall through
-          case 42: break;
-          case 20:
+          case 45: break;
+          case 21:
             { return new Token(ELSE, yytext(), null, yyline + 1);
             }
           // fall through
-          case 43: break;
-          case 21:
+          case 46: break;
+          case 22:
             { return new Token(THEN, yytext(), null, yyline + 1);
             }
           // fall through
-          case 44: break;
-          case 22:
+          case 47: break;
+          case 23:
             { return new Token(BEGIN, yytext(), null, yyline + 1);
             }
           // fall through
-          case 45: break;
-          case 23:
+          case 48: break;
+          case 24:
             { return new Token(PRINT, yytext(), null, yyline + 1);
             }
           // fall through
-          case 46: break;
+          case 49: break;
+          case 25:
+            { return new Token(WHILE, yytext(), null, yyline + 1);
+            }
+          // fall through
+          case 50: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }
