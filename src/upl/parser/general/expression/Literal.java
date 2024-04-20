@@ -1,6 +1,4 @@
-package upl.parser.expression;
-
-import upl.lexer.Token;
+package upl.parser.general.expression;
 
 public class Literal extends Expression {
 	public final Object value;

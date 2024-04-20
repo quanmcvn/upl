@@ -5,10 +5,10 @@ import java.util.List;
 
 import upl.lexer.Lexer;
 import upl.lexer.Token;
-import upl.parser.ASTPrinter;
 import upl.parser.Environment;
 import upl.parser.Parser;
-import upl.parser.statement.Statements;
+import upl.parser.general.statement.Statements;
+import upl.parser.visualize.TextBox;
 
 public class Main{
 	static boolean hasCompileError = false;
@@ -37,6 +37,10 @@ public class Main{
 		
 		List<Token> tokens = lexer.getTokens();
 		
+//		for (Token token : tokens) {
+//			System.out.println(token);
+//		}
+		
 		Parser parser = new Parser(tokens);
 		
 		Statements statements = parser.parse();
@@ -47,7 +51,7 @@ public class Main{
 		
 		Environment environment = parser.getEnvironment();
 		
-		System.out.println(new ASTPrinter().print(statements));
+		System.out.println(new TextBox().print(statements));
 		//
 //		int status=1;
 //

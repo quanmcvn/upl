@@ -1,4 +1,4 @@
-package upl.parser.expression;
+package upl.parser.general.expression;
 
 import upl.lexer.Token;
 

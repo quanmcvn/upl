@@ -1,8 +1,6 @@
-package upl.parser.statement;
+package upl.parser.general.statement;
 
 import java.util.List;
-import upl.parser.expression.Expression;
-import upl.parser.expression.Variable;
 
 public class Statements extends Statement {
 	public final List<Statement> statements;

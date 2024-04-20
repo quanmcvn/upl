@@ -92,9 +92,9 @@ public class GenAST {
 	}
 	
 	public static void main(String[] args) {
-//		System.out.println(convertPackageToOutputDirectory("upl.parser.expression"));
+//		System.out.println(convertPackageToOutputDirectory("upl.parser.general.expression"));
 		GenAST genAST = new GenAST();
-		genAST.defineAST("upl.parser.expression", "Expression", Arrays.asList(
+		genAST.defineAST("upl.parser.general.expression", "Expression", Arrays.asList(
 				"BinaryExpression : Expression left, Token operator, Expression right",
 				"UnaryExpression  : Token operator, Expression expression",
 				"Grouping         : Expression expression",
@@ -103,18 +103,18 @@ public class GenAST {
 		), Arrays.asList(
 				"upl.lexer.Token"
 		));
-		genAST.defineAST("upl.parser.statement", "Statement", Arrays.asList(
+		genAST.defineAST("upl.parser.general.statement", "Statement", Arrays.asList(
 				"Statements  : List<Statement> statements",
 				"IfThenElse  : Expression condition, Statements thenBranch, Statements elseBranch",
-				"DoWhile     : Statements body, Expression expression",
+				"DoWhile     : Statements body, Expression condition",
 				"Print       : Expression expression",
 				"Declaration : Variable variable, Expression initializer",
 				"Assignment  : Variable variable, Expression expression"
 		), Arrays.asList(
 				"java.util.List",
 				"upl.lexer.Token",
-				"upl.parser.expression.Expression",
-				"upl.parser.expression.Variable"
+				"upl.parser.general.expression.Expression",
+				"upl.parser.general.expression.Variable"
 		));
 	}
 }

@@ -3,8 +3,10 @@ package upl.parser;
 import upl.CompileTimeError;
 import upl.lexer.Token;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 public class Environment {
 	public static class EnvironmentEntry {
@@ -19,6 +21,7 @@ public class Environment {
 			return type.toString();
 		}
 	}
+	public final List<Environment> environmentList = new ArrayList<>();
 	public final Environment enclosing;
 	private final Map<String, EnvironmentEntry> values = new HashMap<>();
 	public Environment() {
@@ -26,6 +29,7 @@ public class Environment {
 	}
 	public Environment(Environment enclosing) {
 		this.enclosing = enclosing;
+		enclosing.environmentList.add(this);
 	}
 	EnvironmentEntry get(Token name) {
 		if (values.containsKey(name.lexeme)) {
@@ -39,9 +43,9 @@ public class Environment {
 		if (values.containsKey(name.lexeme)) {
 			EnvironmentEntry prev = values.get(name.lexeme);
 			if (prev.type.lexeme.equals(entry.type.lexeme)) {
-				throw new CompileTimeError(name, String.format("redeclaration of \"%s %s\"\nnote: previously declare at line %d", entry.type.lexeme, name.lexeme, prev.type.line));
+				throw new CompileTimeError(name, String.format("redeclaration of \"%s %s\"\nnote: previously declared at line %d", entry.type.lexeme, name.lexeme, prev.type.line));
 			} else {
-				throw new CompileTimeError(name, String.format("conflicting declaration of \"%s %s\"\nnote: previously declare as \"%s %s\" at line %d",  entry.type.lexeme, name.lexeme, prev.type.lexeme, name.lexeme, prev.type.line));
+				throw new CompileTimeError(name, String.format("conflicting declaration of \"%s %s\"\nnote: previously declared as \"%s %s\" at line %d",  entry.type.lexeme, name.lexeme, prev.type.lexeme, name.lexeme, prev.type.line));
 			}
 		}
 		values.put(name.lexeme, entry);
@@ -53,9 +57,6 @@ public class Environment {
 		}
 		
 		return environment;
-	}
-	Object getAt(int distance, String name) {
-		return ancestor(distance).values.get(name);
 	}
 	@Override
 	public String toString() {

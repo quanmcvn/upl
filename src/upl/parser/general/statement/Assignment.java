@@ -1,7 +1,7 @@
-package upl.parser.statement;
+package upl.parser.general.statement;
 
-import upl.parser.expression.Expression;
-import upl.parser.expression.Variable;
+import upl.parser.general.expression.Expression;
+import upl.parser.general.expression.Variable;
 
 public class Assignment extends Statement {
 	public final Variable variable;

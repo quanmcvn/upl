@@ -1,8 +1,4 @@
-package upl.parser.statement;
-
-import java.util.List;
-import upl.parser.expression.Expression;
-import upl.parser.expression.Variable;
+package upl.parser.general.statement;
 
 public abstract class Statement {
 	public interface Visitor<R> {

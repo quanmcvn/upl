@@ -3,8 +3,8 @@ package upl.parser;
 import upl.CompileTimeError;
 import upl.lexer.Token;
 import upl.lexer.TokenType;
-import upl.parser.expression.*;
-import upl.parser.statement.*;
+import upl.parser.general.expression.*;
+import upl.parser.general.statement.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class Parser {
 			while (!check(END) && !isAtEnd()) {
 				statements.add(statement());
 			}
-			consume(END, "expected and 'end'");
+			consume(END, "expected an 'end'");
 			return new Statements(statements);
 		} catch (CompileTimeError e) {
 			return null;
@@ -38,13 +38,13 @@ public class Parser {
 	}
 	
 	private Statements block() {
-		consume(LEFT_BRACE, "expect a '{' at the begin of a block");
+		consume(LEFT_BRACE, "expected a '{' at the begin of a block");
 		environment = new Environment(environment);
 		List<Statement> statements = new ArrayList<>();
 		while (!check(RIGHT_BRACE) && !isAtEnd()) {
 			statements.add(statement());
 		}
-		consume(RIGHT_BRACE, "Expect a '}' after block.");
+		consume(RIGHT_BRACE, "expected a '}' after block.");
 		environment = environment.enclosing;
 		return new Statements(statements);
 	}
@@ -260,10 +260,9 @@ public class Parser {
 				case INT:
 				case BOOL:
 				case IF:
+				case DO:
 				case WHILE:
 				case PRINT:
-				case LEFT_BRACE:
-				case RIGHT_BRACE:
 				case END:
 					return;
 			}

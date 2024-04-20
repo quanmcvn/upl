@@ -1,19 +1,7 @@
 begin
-	$$$$$
-	$$$$$
 	int x;
 	int y=x+1;
-	/*	comments
-	cho nhiều dòng
-	*/
-	//
-	bool a;//comment cho một dòng
-	// /* multiline in oneline */
-	/*
-	// comment in multiline
-	/*
-	  nested comment
-	*//**///comment right after openclosed comment
+	bool a;
 	if x>a then{
 		int c=1;
 	}else{
@@ -25,7 +13,7 @@ begin
 	x=x+1;
 }
 	bool b;
-	bool x=a==b;
+	bool z=a==b;
 	do{
 		int b=1;
 		b=b*10;
