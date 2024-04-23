@@ -1,0 +1,237 @@
+package upl.parser.parser.automatic;
+
+import java_cup.runtime.*;
+import upl.lexer.Lexer;
+import upl.lexer.Token;
+import upl.lexer.TokenType;
+import upl.parser.general.expression.*;
+import upl.parser.general.statement.*;
+import upl.parser.parser.automatic.MyLocation;
+import upl.parser.parser.automatic.MyComplexSymbolFactory;
+import upl.parser.parser.automatic.MyComplexSymbol;
+import upl.parser.visualize.TextBox;
+
+import java.io.InputStreamReader;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map.Entry;
+import java.util.AbstractMap.SimpleEntry;
+
+class CupParser;
+
+parser code {:
+    //public CupParser (FakeScanner s, ComplexSymbolFactory sf) { super(sf); this.s = s; }
+    private Token newToken(TokenType type, String lexeme, Location loc) {
+        return new Token(type, lexeme, loc.getLine(), loc.getColumn());
+    }
+    public static void errorLog(Location loc, String message) {
+        System.err.printf("at %s:%d:%d: %s\n", loc.getUnit(), loc.getLine(), loc.getColumn(), message);
+    }
+    @Override
+    public void report_error(String message, Object info) {
+        System.err.printf("cup_parser_error: %s %s\n", message, info);
+    }
+    @Override
+    public void report_fatal_error(String message, Object info) {
+        System.err.printf("cup_parser_fatal_error: %s %s\n", message, info);
+    }
+    @Override
+    public void syntax_error(Symbol cur_token) {
+        report_error("syntax error:", cur_token);
+    }
+    @Override
+    public void unrecovered_syntax_error(Symbol cur_token) {
+        report_fatal_error("syntax error:", cur_token);
+    }
+
+    @Override
+    protected int error_sync_size() { return 3333; }
+
+    public Statements program = null;
+:}
+
+init with {: :};
+scan with {: return getScanner().next_token(); :};
+
+terminal LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE ;
+terminal PLUS, SEMICOLON, STAR ;
+
+terminal EQUAL, EQUAL_EQUAL ;
+terminal GREATER, GREATER_EQUAL ;
+
+terminal String IDENTIFIER;
+
+terminal Integer NUMBER;
+
+terminal BEGIN, END, IF, THEN, ELSE, DO, WHILE, PRINT ;
+terminal INT, BOOL ;
+
+non terminal Statements Program, Statements;
+non terminal Statement Statement;
+non terminal IfThenElse IfThenElseStatement;
+non terminal DoWhile DoWhileStatement;
+non terminal Print PrintStatement;
+non terminal Declaration DeclarationStatement;
+non terminal Assignment AssignmentStatement;
+// non terminal IfThenElse IfThen; not actually needed
+non terminal Statements MaybeElse; // more trolling
+non terminal Token TypeSpecifier;
+non terminal Entry<Token, Expression> InitDeclarator; // a little bit of trolling
+non terminal Expression Expression;
+non terminal Expression EqualityExpression, RelationalExpression, AdditiveExpression, MultiplicativeExpression;
+non terminal Expression PrimaryExpression;
+
+non terminal Variable Identifier; // for easy use
+
+non terminal LEFT_PAREN1; // error
+non terminal RIGHT_PAREN1; // error
+non terminal LEFT_BRACE1; // error
+non terminal RIGHT_BRACE1; // error
+non terminal SEMICOLON1; // error
+non terminal BEGIN1; // error
+non terminal END1; // error
+non terminal THEN1; // error
+non terminal WHILE1; // error
+non terminal EQUAL1; // error
+
+non terminal Statement Statement1; // error
+non terminal Expression Expression1; // error
+//non terminal Expression EqualityExpression1; // error
+non terminal Expression RelationalExpression1; // error
+non terminal Expression AdditiveExpression1; // error
+non terminal Expression MultiplicativeExpression1; // error
+non terminal Expression PrimaryExpression1; // error
+
+start with Program ;
+
+//EqualityExpression1 ::= EqualityExpression:e {: RESULT = e; :}
+//                    | error:e {: CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here"); :}
+//                    ;
+RelationalExpression1 ::= RelationalExpression:e {: RESULT = e; :}
+                    | error:e {: CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here"); :}
+                    ;
+AdditiveExpression1 ::= AdditiveExpression:e {: RESULT = e; :}
+                    | error:e {: CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here"); :}
+                    ;
+MultiplicativeExpression1 ::= MultiplicativeExpression:e {: RESULT = e; :}
+                    | error:e {: CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here"); :}
+                    ;
+PrimaryExpression1 ::= PrimaryExpression:e {: RESULT = e; :}
+                    | error:e {: CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here"); :}
+                    ;
+
+LEFT_PAREN1 ::= LEFT_PAREN
+            | error:e {: System.err.println(String.format("at %s: expected '('\n", exleft)); :} ;
+RIGHT_PAREN1 ::= RIGHT_PAREN
+            | error:e {: System.err.println(String.format("at %s: expected ')'\n", exleft)); :} ;
+LEFT_BRACE1 ::= LEFT_BRACE
+            | error:e {: System.err.println(String.format("at %s: expected '{'\n", exleft)); :} ;
+RIGHT_BRACE1 ::= RIGHT_BRACE
+            // | error:e {: System.err.println(String.format("at %s: expected '}'\n", exleft)); :}
+            ;
+
+SEMICOLON1 ::= SEMICOLON
+            | error:e {: System.err.println(String.format("at %s: expected ';'\n", exleft)); :} ;
+
+BEGIN1 ::= BEGIN
+            | error:e {: System.err.println(String.format("at %s: expected 'begin'\n", exleft)); :} ;
+END1 ::= END
+            | error:e {: System.err.println(String.format("at %s: expected 'end'\n", exleft)); :} ;
+THEN1 ::= THEN
+            | error:e {: System.err.println(String.format("at %s: expected 'then'\n", exleft)); :} ;
+WHILE1 ::= WHILE
+            | error:e {: System.err.println(String.format("at %s: expected 'while'\n", exleft)); :} ;
+EQUAL1 ::= EQUAL
+            | error:e {: System.err.println(String.format("at %s: expected '='\n", exleft)); :} ;
+
+
+Statement1 ::= Statement:s {: RESULT = s; :}
+            | error:e {: CupParser.errorLog(exleft, "expected a statement"); :}
+            ;
+
+Expression1 ::= Expression:e {: RESULT = e; :}
+            | error:e {: System.err.println(String.format("Expression error\n")); :}
+            ;
+
+//SEMICOLON1 ::= SEMICOLON
+//             | error:e
+//                {:
+//                    System.err.println("hello semicolon error\n");
+//                    List<Integer> expected = expected_token_ids();
+//                    StringBuilder builder = new StringBuilder();
+//                    for (int i : expected) {
+//                        builder.append(" ").append(CupParserSym.terminalNames[i]);
+//                    }
+//                    parser.report_error(String.format("expected %s", builder.toString()), e);
+//                    :}
+//             ;
+
+Program ::= BEGIN1 Statements:statements END1                                                     {: program = statements; /* System.out.println((new TextBox()).print(program)); */ :}
+          ;
+
+Statements ::= Statements:statements Statement1:statement                                        {: if (statement != null) statements.statements.add(statement);
+                                                                                                    RESULT = statements; :}
+             | /* empty */                                                                      {: RESULT = new Statements(new ArrayList<>()); :}
+             ;
+
+Statement ::= IfThenElseStatement:statement                                                     {: RESULT = statement; :}
+            | DoWhileStatement:statement                                                        {: RESULT = statement; :}
+            | PrintStatement:statement                                                          {: RESULT = statement; :}
+            | DeclarationStatement:statement                                                    {: RESULT = statement; :}
+            | AssignmentStatement:statement                                                     {: RESULT = statement; :}
+            ;
+
+IfThenElseStatement ::= IF Expression1:condition THEN1 LEFT_BRACE1 Statements:ifBranch RIGHT_BRACE1 MaybeElse:elseBranch   {: RESULT = new IfThenElse(condition, ifBranch, elseBranch); :}
+                      ;
+
+MaybeElse ::= ELSE LEFT_BRACE1 Statements:statements RIGHT_BRACE1                                 {: RESULT = statements; :}
+            | /* empty */                                                                         {: RESULT = null; :}
+            ;
+
+DoWhileStatement ::= DO LEFT_BRACE1 Statements:body RIGHT_BRACE1 WHILE1 LEFT_PAREN1 Expression1:expression RIGHT_PAREN1 SEMICOLON1  {: RESULT = new DoWhile(body, expression); :}
+                   ;
+
+PrintStatement ::= PRINT LEFT_PAREN1 Expression1:expression RIGHT_PAREN1 SEMICOLON1                 {: RESULT = new Print(expression); :}
+                 ;
+
+DeclarationStatement ::= TypeSpecifier:type InitDeclarator:decl SEMICOLON1                         {: RESULT = new Declaration(new Variable(type, decl.getKey()), decl.getValue()); :}
+                       ;
+
+TypeSpecifier ::= INT:lexeme                                                                       {: RESULT = newToken(TokenType.INT, "int", lexemexleft); :}
+                | BOOL:lexeme                                                                      {: RESULT = newToken(TokenType.BOOL, "bool", lexemexleft); :}
+                ;
+
+//InitDeclarator ::= IDENTIFIER:id EQUAL Expression1:expression                                        {: RESULT = new SimpleEntry<>(newToken(TokenType.IDENTIFIER, id, idxleft), expression); :}
+//;
+InitDeclarator ::= IDENTIFIER:id                                                                    {: RESULT = new SimpleEntry<>(newToken(TokenType.IDENTIFIER, id, idxleft), null); :}
+                 | IDENTIFIER:id EQUAL Expression1:expression                                        {: RESULT = new SimpleEntry<>(newToken(TokenType.IDENTIFIER, id, idxleft), expression); :}                 ;
+
+AssignmentStatement ::= Identifier:id EQUAL1 Expression:expression SEMICOLON1                        {: RESULT = new Assignment(id, expression); :}
+                      ;
+
+Expression ::= EqualityExpression:expression                                                       {: RESULT = expression; :}
+             ;
+
+EqualityExpression ::= RelationalExpression:expression                                             {: RESULT = expression; :}
+                     | EqualityExpression:left EQUAL_EQUAL:operator RelationalExpression1:right     {: RESULT = new BinaryExpression(left, newToken(TokenType.EQUAL_EQUAL, "==", operatorxleft) , right); :}
+                     ;
+
+RelationalExpression ::= AdditiveExpression:expression                                             {: RESULT = expression; :}
+                       | RelationalExpression:left GREATER:operator AdditiveExpression1:right       {: RESULT = new BinaryExpression(left, newToken(TokenType.GREATER, ">", operatorxleft) , right); :}
+                       | RelationalExpression:left GREATER_EQUAL:operator AdditiveExpression1:right {: RESULT = new BinaryExpression(left, newToken(TokenType.GREATER_EQUAL, ">=", operatorxleft) , right); :}
+                       ;
+
+AdditiveExpression ::= MultiplicativeExpression:expression                                         {: RESULT = expression; :}
+                     | AdditiveExpression:left PLUS:operator MultiplicativeExpression1:right        {: RESULT = new BinaryExpression(left, newToken(TokenType.PLUS, "+", operatorxleft) , right); :}
+                     ;
+
+MultiplicativeExpression ::= PrimaryExpression:expression                                          {: RESULT = expression; :}
+                           | MultiplicativeExpression:left STAR:operator PrimaryExpression1:right   {: RESULT = new BinaryExpression(left, newToken(TokenType.STAR, "*", operatorxleft) , right); :}
+                           ;
+
+PrimaryExpression ::= Identifier:id                                                                {: RESULT = id; :}
+                    | NUMBER:num                                                                   {: RESULT = new Literal(num); :}
+                    | LEFT_PAREN Expression:expression RIGHT_PAREN1                                 {: RESULT = new Grouping(expression); :}
+                    ;
+
+Identifier ::= IDENTIFIER:id                                                                       {: RESULT = new Variable(newToken(TokenType.IDENTIFIER, CupParserWrapper.magicKeyword, idxleft), newToken(TokenType.IDENTIFIER, id, idxleft)); :};

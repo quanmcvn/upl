@@ -7,8 +7,10 @@ import java.util.List;
 public class Lexer {
 	ILexer lexer;
 	
-	public Lexer(java.io.Reader reader, boolean isManual) {
-		if (isManual) {
+	public Lexer(java.io.Reader reader, boolean isJflex) {
+		if (isJflex) {
+			lexer = new JFlexLexerWrapper(reader);
+		} else {
 			StringBuilder content = new StringBuilder();
 	
 			try (BufferedReader br = new BufferedReader(reader)) {
@@ -21,8 +23,6 @@ public class Lexer {
 			}
 	
 			lexer = new ManualLexer(content.toString());
-		} else {
-			lexer = new JFlexLexerWrapper(reader);
 		}
 	}
 	

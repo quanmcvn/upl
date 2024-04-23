@@ -5,20 +5,25 @@ Has scanner and parser (to AST) currently
 
 <h2>Usage</h2>
 
-To run with the usage of JFlex
+To run
 ```sh
 $ ant run
 ```
 
-Or run with manual made scanner
-```sh
-$ ant run-manual 
-```
+To run with the usage if JFlex, add `-Djflex=true`
+
+To run with the usage if Cup, add `-Dcup=true`
+
+You can also run it with `-Dcolorful=true` for a better look (it can be broken if your terminal doesn't support it)
+
+eg: run with cup and color `ant run -Dcup=true -Dcolorful=true`
 
 These runs will take input as file `input.upl` by default.
 You can change it by adding `-Dinput=<yourfile>`, eg `ant run -Dinput=input2.upl`
 
-Output: Parsed AST in prefix notation
+Output: Parsed AST
+
+Demo: <img src="./demo/demo1.png"></img>
 
 <h2>Grammar</h2>
 

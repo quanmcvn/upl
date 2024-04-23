@@ -1,23 +1,7 @@
 begin
-	int x;
-	int y=x+1;
-	bool a;
-	if x>a then{
-		int c=1;
-	}else{
-		y=x;
-		x=x+1;
-	}
-	print(a);
-	if x>=a then{
-	x=x+1;
-}
-	bool b;
-	bool z=a==b;
-	do{
-		int b=1;
-		b=b*10;
-		a=(b+10)*b;
-	}while(a>1);
-	print(a+1);
+do {
+int x;
+x = 1;
+int y = 1 + x;
+} while (1 == 2);
 end

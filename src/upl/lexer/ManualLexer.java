@@ -31,6 +31,12 @@ public class ManualLexer implements ILexer {
 	private int current = 0;
 	private int line = 1;
 	private int currentStartOfLine = 0;
+	private int line() {
+		return line;
+	}
+	private int column() {
+		return current - currentStartOfLine;
+	}
 	public ManualLexer(String source) {
 		this.source = source;
 	}
@@ -68,7 +74,7 @@ public class ManualLexer implements ILexer {
 	
 	private void addToken(TokenType type, Object value) {
 		String text = source.substring(start, current);
-		tokens.add(new Token(type, text, value, line));
+		tokens.add(new Token(type, text, value, line(), column()));
 		
 	}
 	private boolean isDigit(char c) {
@@ -86,9 +92,8 @@ public class ManualLexer implements ILexer {
 			start = current;
 			scanToken();
 		}
-		
-		tokens.add(new Token(EOF, "EOF", null, line));
-		
+		if (tokens.isEmpty()) tokens.add(new Token(EOF, "EOF", null, 0, 0));
+		else tokens.add(new Token(EOF, "EOF", null, tokens.get(tokens.size() - 1).line, tokens.get(tokens.size() - 1).column));
 		return tokens;
 	}
 	
@@ -115,7 +120,7 @@ public class ManualLexer implements ILexer {
 					comment.append(consume());
 					comment.append(consume());
 				} else {
-					Main.error(line, current - currentStartOfLine,"Unexpected /");
+					Main.error(line(), column(),"Unexpected /");
 					break;
 				}
 //				System.out.printf("Got comment: %s\n", comment);
@@ -139,7 +144,7 @@ public class ManualLexer implements ILexer {
 				} else if(isAlpha(c)) {
 					identifier();
 				} else {
-					Main.error(line, current - currentStartOfLine, String.format("Unexpected %c", c));
+					Main.error(line(), column(), String.format("Unexpected %c", c));
 				}
 		}
 	}

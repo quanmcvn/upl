@@ -724,7 +724,7 @@ class JFlexLexer {
 
       if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
         zzAtEOF = true;
-          { 	return new Token(EOF, "", null, yyline + 1);
+          { 	return new Token(EOF, "", null, yyline + 1, yycolumn);
  }
       }
       else {
@@ -740,57 +740,57 @@ class JFlexLexer {
           // fall through
           case 27: break;
           case 3:
-            { return new Token(LEFT_PAREN, yytext(), null, yyline + 1);
+            { return new Token(LEFT_PAREN, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 28: break;
           case 4:
-            { return new Token(RIGHT_PAREN, yytext(), null, yyline + 1);
+            { return new Token(RIGHT_PAREN, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 29: break;
           case 5:
-            { return new Token(STAR, yytext(), null, yyline + 1);
+            { return new Token(STAR, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 30: break;
           case 6:
-            { return new Token(PLUS, yytext(), null, yyline + 1);
+            { return new Token(PLUS, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 31: break;
           case 7:
-            { return new Token(NUMBER, yytext(), Integer.parseInt(yytext()), yyline + 1);
+            { return new Token(NUMBER, yytext(), Integer.parseInt(yytext()), yyline + 1, yycolumn);
             }
           // fall through
           case 32: break;
           case 8:
-            { return new Token(SEMICOLON, yytext(), null, yyline + 1);
+            { return new Token(SEMICOLON, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 33: break;
           case 9:
-            { return new Token(EQUAL, yytext(), null, yyline + 1);
+            { return new Token(EQUAL, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 34: break;
           case 10:
-            { return new Token(GREATER, yytext(), null, yyline + 1);
+            { return new Token(GREATER, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 35: break;
           case 11:
-            { return new Token(IDENTIFIER, yytext(), null, yyline + 1);
+            { return new Token(IDENTIFIER, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 36: break;
           case 12:
-            { return new Token(LEFT_BRACE, yytext(), null, yyline + 1);
+            { return new Token(LEFT_BRACE, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 37: break;
           case 13:
-            { return new Token(RIGHT_BRACE, yytext(), null, yyline + 1);
+            { return new Token(RIGHT_BRACE, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 38: break;
@@ -800,59 +800,59 @@ class JFlexLexer {
           // fall through
           case 39: break;
           case 15:
-            { return new Token(EQUAL_EQUAL, yytext(), null, yyline + 1);
+            { return new Token(EQUAL_EQUAL, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 40: break;
           case 16:
-            { return new Token(GREATER_EQUAL, yytext(), null, yyline + 1);
+            { return new Token(GREATER_EQUAL, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 41: break;
           case 17:
-            { return new Token(DO, yytext(), null, yyline + 1);
+            { return new Token(DO, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 42: break;
           case 18:
-            { return new Token(IF, yytext(), null, yyline + 1);
+            { return new Token(IF, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 43: break;
           case 19:
-            { return new Token(END, yytext(), null, yyline + 1);
+            { return new Token(END, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 44: break;
           case 20:
-            { if (yytext().equals("int")) return new Token(INT, yytext(), null, yyline + 1);
-	else if (yytext().equals("bool")) return new Token(BOOL, yytext(), null, yyline + 1);
+            { if (yytext().equals("int")) return new Token(INT, yytext(), null, yyline + 1, yycolumn);
+	else if (yytext().equals("bool")) return new Token(BOOL, yytext(), null, yyline + 1, yycolumn);
 	Main.error(yyline + 1, yycolumn, "Unexpected " + yytext()); System.exit(1);
             }
           // fall through
           case 45: break;
           case 21:
-            { return new Token(ELSE, yytext(), null, yyline + 1);
+            { return new Token(ELSE, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 46: break;
           case 22:
-            { return new Token(THEN, yytext(), null, yyline + 1);
+            { return new Token(THEN, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 47: break;
           case 23:
-            { return new Token(BEGIN, yytext(), null, yyline + 1);
+            { return new Token(BEGIN, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 48: break;
           case 24:
-            { return new Token(PRINT, yytext(), null, yyline + 1);
+            { return new Token(PRINT, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 49: break;
           case 25:
-            { return new Token(WHILE, yytext(), null, yyline + 1);
+            { return new Token(WHILE, yytext(), null, yyline + 1, yycolumn);
             }
           // fall through
           case 50: break;
