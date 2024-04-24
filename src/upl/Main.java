@@ -7,6 +7,7 @@ import upl.lexer.Lexer;
 import upl.lexer.Token;
 import upl.parser.Parser;
 import upl.parser.parser.automatic.CupParserWrapper;
+import upl.parser.parser.manual.bottomup.BottomUpParser;
 import upl.parser.parser.manual.topdown.TopDownParser;
 import upl.parser.general.statement.Statements;
 import upl.parser.visualize.TextBox;
@@ -49,6 +50,7 @@ public class Main{
 		boolean jflex = false;
 		boolean colorful = false;
 		boolean cup = false;
+		boolean bottomup = false;
 		for (String arg : args) {
 			if (arg.startsWith("--")) {
 				String[] part = arg.substring(2).split("=");
@@ -64,6 +66,10 @@ public class Main{
 					cup = Boolean.parseBoolean(part[1]);
 					continue;
 				}
+				if (part[0].equals("bottom-up")) {
+					bottomup = Boolean.parseBoolean(part[1]);
+					continue;
+				}
 			} else {
 				filename = arg;
 			}
@@ -72,6 +78,8 @@ public class Main{
 			System.err.println("Missing input file.");
 			System.exit(1);
 		}
+		
+		TextBox.setEnableVT100Mode(colorful);
 		
 		Lexer lexer = new Lexer(new InputStreamReader(new java.io.FileInputStream(filename)), jflex);
 		
@@ -82,8 +90,13 @@ public class Main{
 //		}
 		
 		Parser parser;
-		if (cup) parser = new CupParserWrapper(tokens);
-		else parser = new TopDownParser(tokens);
+		if (cup) {
+			parser = new CupParserWrapper(tokens);
+		} else if (bottomup) {
+			parser = new BottomUpParser(tokens);
+		} else {
+			parser = new TopDownParser(tokens);
+		}
 		
 		Statements statements = parser.parse();
 		
@@ -92,8 +105,6 @@ public class Main{
 		}
 		
 //		Environment environment = parser.getEnvironment();
-		
-		TextBox.setEnableVT100Mode(colorful);
 		
 		System.out.println(new TextBox().print(statements));
 		//

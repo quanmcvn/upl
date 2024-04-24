@@ -70,6 +70,14 @@ public class SLRParsingTable {
 						int j = augmentedGrammar.productionList.indexOf(item.production);
 						Action act = new Action(ActionType.REDUCE, j);
 						for (Terminal terminal : augmentedGrammar.follow.get(item.production.left)) {
+							if (action.get(i).containsKey(terminal)) {
+								Action act2 = action.get(i).get(terminal);
+								if (act2.actionType() == ActionType.SHIFT) {
+									System.err.printf("shift/reduce conflict in production %s on terminal %s\n", augmentedGrammar.productionList.get(j), terminal);
+								} else if (act2.actionType() == ActionType.REDUCE) {
+									System.err.printf("reduce/reduce conflict in production %s on terminal %s\n", augmentedGrammar.productionList.get(j), terminal);
+								}
+							}
 							action.get(i).put(terminal, act);
 						}
 					} else {

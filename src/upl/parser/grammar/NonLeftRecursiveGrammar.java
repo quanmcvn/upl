@@ -231,37 +231,37 @@ public class NonLeftRecursiveGrammar {
 	public void calculateFirstAndFollow(Map<NonTerminal, Set<Terminal>> theirFirst, Map<NonTerminal, Set<Terminal>> theirFollow) {
 		removeLeftRecursion();
 		
-		System.out.println("```\n");
-		for (Production production : productionList) {
-			System.out.println(production);
-		}
-		System.out.println("```\n");
+//		System.out.println("```\n");
+//		for (Production production : productionList) {
+//			System.out.println(production);
+//		}
+//		System.out.println("```\n");
 		
 		// calculate first and follow real
 		calculateFirst();
 		calculateFollow();
 		
-		System.out.println("```\n");
-		System.out.println("FIRST:\n");
-		ourFirst.forEach(((symbol, terminals) -> {
-			System.out.printf("first(%s): ", symbol);
-			for (Terminal terminal : terminals) {
-				System.out.printf("%s ", terminal);
-			}
-			System.out.println();
-		}));
-		System.out.println();
-		
-		System.out.println("FOLLOW:\n");
-		ourFollow.forEach(((nonTerminal, terminals) -> {
-			System.out.printf("follow(%s): ", nonTerminal);
-			for (Terminal terminal : terminals) {
-				System.out.printf("%s ", terminal);
-			}
-			System.out.println();
-		}));
-		System.out.println();
-		System.out.println("```\n");
+//		System.out.println("```\n");
+//		System.out.println("FIRST:\n");
+//		ourFirst.forEach(((symbol, terminals) -> {
+//			System.out.printf("first(%s): ", symbol);
+//			for (Terminal terminal : terminals) {
+//				System.out.printf("%s ", terminal);
+//			}
+//			System.out.println();
+//		}));
+//		System.out.println();
+//
+//		System.out.println("FOLLOW:\n");
+//		ourFollow.forEach(((nonTerminal, terminals) -> {
+//			System.out.printf("follow(%s): ", nonTerminal);
+//			for (Terminal terminal : terminals) {
+//				System.out.printf("%s ", terminal);
+//			}
+//			System.out.println();
+//		}));
+//		System.out.println();
+//		System.out.println("```\n");
 		
 		// adding non-terminal to real
 		for (NonTerminal nonTerminal : nonTerminalList) {

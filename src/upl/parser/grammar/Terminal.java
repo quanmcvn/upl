@@ -5,7 +5,7 @@ import upl.lexer.Token;
 public class Terminal extends Symbol {
 	public final Token token;
 	public Terminal(Token token) {
-		super(token.type.name());
+		super(token.type.name(), token);
 		this.token = token;
 	}
 	public Terminal(String name) {

@@ -64,8 +64,9 @@ public class GrammarBuilderHelper {
 	 *  If both wrong then error ig
 	 * @param left is a non-terminal
 	 * @param right is a string of non-terminal and terminal
+	 * @param nonTerminalReducer is a reducer, more in Production.NonTerminalReducer
 	 */
-	public void addProduction(String left, String right) {
+	public void defineProduction(String left, String right, Production.NonTerminalReducer nonTerminalReducer) {
 		String[] parts = right.split("\\s+");
 		if (!hasNonTerminal(left)) {
 			throw new RuntimeException(String.format("left of production: ??? %s is ???\n", left));
@@ -82,15 +83,23 @@ public class GrammarBuilderHelper {
 			}
 			throw new RuntimeException(String.format("right of production: ??? %s is ???\n", name));
 		}
-		productionList.add(new Production(getNonTerminal(left), symbols));
+		productionList.add(new Production(getNonTerminal(left), symbols, nonTerminalReducer));
 	}
 	
 	/**
 	 * Add production in the form of "A -> B d"
 	 */
-	public void addProduction(String production) {
+	public void defineProduction(String production) {
 		String[] parts = production.split("\\s*->\\s*");
-		addProduction(parts[0], parts[1]);
+		defineProduction(parts[0], parts[1], Production.nullReducer);
+	}
+	
+	/**
+	 * Add production in the form of "A -> B d"
+	 */
+	public void defineProduction(String production, Production.NonTerminalReducer nonTerminalReducer) {
+		String[] parts = production.split("\\s*->\\s*");
+		defineProduction(parts[0], parts[1], nonTerminalReducer);
 	}
 	
 	public Grammar getGrammar(String start) {

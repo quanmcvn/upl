@@ -10,7 +10,7 @@
   <property name="input" value="input.upl" />
   <property name="jflex" value="false" />
   <property name="cup" value="false" />
-  <property name="bottom_up" value="false" />
+  <property name="bottom-up" value="false" />
   <property name="colorful" value="false" />
 
   <presetdef name="javac">
@@ -64,11 +64,12 @@
   </target>
 
   <target name="run" depends="jar">
-    <java jar="${dist}/Compiler.jar" fork="true" failonerror="true">
+    <java jar="${dist}/Compiler.jar" fork="true" >
       <arg value="${input}" />
       <arg value="--jflex=${jflex}" />
       <arg value="--colorful=${colorful}" />
       <arg value="--cup=${cup}" />
+      <arg value="--bottom-up=${bottom-up}" />
     </java>
   </target>
 

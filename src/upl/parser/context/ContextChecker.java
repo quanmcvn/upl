@@ -3,9 +3,9 @@ package upl.parser.context;
 import upl.CompileTimeError;
 import upl.lexer.Token;
 import upl.lexer.TokenType;
+import upl.parser.Parser;
 import upl.parser.general.expression.*;
 import upl.parser.general.statement.*;
-import upl.parser.parser.automatic.CupParserWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +65,7 @@ public class ContextChecker implements Expression.Visitor<Expression>, Statement
 	
 	@Override
 	public Expression visitVariable(Variable expression) {
-		if (expression.type.lexeme.equals(CupParserWrapper.magicKeyword)) {
+		if (expression.type.lexeme.equals(Parser.magicKeyword)) {
 			try {
 				Token type = environment.get(expression.identifier).type;
 				return new Variable(type, expression.identifier);

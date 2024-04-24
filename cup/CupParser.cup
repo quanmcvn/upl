@@ -201,8 +201,6 @@ TypeSpecifier ::= INT:lexeme                                                    
                 | BOOL:lexeme                                                                      {: RESULT = newToken(TokenType.BOOL, "bool", lexemexleft); :}
                 ;
 
-//InitDeclarator ::= IDENTIFIER:id EQUAL Expression1:expression                                        {: RESULT = new SimpleEntry<>(newToken(TokenType.IDENTIFIER, id, idxleft), expression); :}
-//;
 InitDeclarator ::= IDENTIFIER:id                                                                    {: RESULT = new SimpleEntry<>(newToken(TokenType.IDENTIFIER, id, idxleft), null); :}
                  | IDENTIFIER:id EQUAL Expression1:expression                                        {: RESULT = new SimpleEntry<>(newToken(TokenType.IDENTIFIER, id, idxleft), expression); :}                 ;
 

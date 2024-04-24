@@ -6,6 +6,7 @@ import upl.parser.context.Environment;
 import upl.parser.general.statement.Statements;
 
 public interface Parser {
+	String magicKeyword = "NOT CHECKED!!!";
 	Environment getEnvironment();
 	
 	Statements parse();

@@ -7,17 +7,36 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Production implements Comparable<Production> {
+	/**
+	 *  NonTerminalReducer: as its name, this is a reducer
+	 *  <br>
+	 *  When a production is reduced (by BottomUpParser), then its code will be called
+	 */
+	public interface NonTerminalReducer {
+		Object reduce(Object[] symbolValues);
+	}
+	public static final NonTerminalReducer nullReducer = symbolValues -> null;
 	public final NonTerminal left;
 	public final List<Symbol> right;
+	public final NonTerminalReducer nonTerminalReducer;
 	public Production(NonTerminal left, List<Symbol> right) {
 		this.left = left;
 		this.right = right;
+		this.nonTerminalReducer = nullReducer;
 	}
 	public Production(NonTerminal left, Symbol... symbols) {
 		this.left = left;
 		this.right = new ArrayList<>();
 		right.addAll(Arrays.asList(symbols));
+		this.nonTerminalReducer = nullReducer;
 	}
+	
+	public Production(NonTerminal left, List<Symbol> right, NonTerminalReducer nonTerminalReducer) {
+		this.left = left;
+		this.right = right;
+		this.nonTerminalReducer = nonTerminalReducer;
+	}
+	
 	@Override
 	public int compareTo(Production production) {
 		if (!left.equals(production.left)) {
@@ -62,4 +81,15 @@ public class Production implements Comparable<Production> {
 		}
 	}
 	
+	public boolean isEpsilonProduction() {
+		return right.size() == 1 && right.get(0).equals(Grammar.epsilon);
+	}
+	
+	public NonTerminal reduce(Symbol[] symbols) {
+		Object[] symbolValues = new Object[symbols.length];
+		for (int i = 0; i < symbols.length; ++ i) {
+			symbolValues[i] = symbols[i].object;
+		}
+		return new NonTerminal(left.toString(), nonTerminalReducer.reduce(symbolValues));
+	}
 }

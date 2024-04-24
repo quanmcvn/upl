@@ -13,16 +13,14 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 public class CupParserWrapper implements Parser {
-	public static final String magicKeyword = "NOT CHECKED!!!";
 	private final List<Token> tokenList;
 	private Environment environment = null;
-	private Statements program = null;
 	public CupParserWrapper(List<Token> tokenList) {
 		this.tokenList = tokenList;
 	}
 	@Override
 	public Environment getEnvironment() {
-		return null;
+		return environment;
 	}
 	
 	@Override
@@ -42,7 +40,6 @@ public class CupParserWrapper implements Parser {
 		program = contextChecker.check();
 		
 		this.environment = contextChecker.getEnvironment();
-		this.program = program;
 		return program;
 	}
 	

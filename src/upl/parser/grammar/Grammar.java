@@ -82,6 +82,44 @@ public class Grammar {
 		new NonLeftRecursiveGrammar(start, nonTerminalList, productionList).calculateFirstAndFollow(first, follow);
 	}
 	
+	public Grammar getEpsilonFreeGrammar() {
+		List<Production> newProductionList = new ArrayList<>();
+		List<Terminal> newTerminalList = new ArrayList<>();
+		for (Terminal terminal : terminalList) {
+			if (!terminal.equals(Grammar.epsilon)) newTerminalList.add(terminal);
+		}
+		
+		for (Production production : productionList) {
+			newProductionList.add(production);
+			
+			if (!production.isEpsilonProduction()) {
+				newProductionList.add(production);
+			} else {
+				NonTerminal left = production.left;
+				for (Production production1 : productionList) {
+					boolean hasLeftInRight = false;
+					List<Symbol> right = new ArrayList<>();
+					for (Symbol symbol : production1.right) {
+						if (symbol instanceof NonTerminal nonTerminal) {
+							if (left.equals(nonTerminal)) {
+								hasLeftInRight = true;
+								continue;
+							}
+						}
+						right.add(symbol);
+					}
+					if (hasLeftInRight) {
+						Production newProduction = new Production(production1.left, right);
+						System.out.printf("new production: %s\n", newProduction);
+						newProductionList.add(newProduction);
+					}
+				}
+			}
+		}
+		
+		return new Grammar(start, nonTerminalList, newTerminalList, newProductionList);
+	}
+	
 	public Grammar getAugmentedGrammar() {
 		NonTerminal newStart = new NonTerminal(String.format("%s'", start));
 		
@@ -124,12 +162,12 @@ public class Grammar {
 		helper.defineTerminal("(");
 		helper.defineTerminal(")");
 		
-		helper.addProduction("E -> E + T");
-		helper.addProduction("E -> T");
-		helper.addProduction("T -> T * F");
-		helper.addProduction("T -> F");
-		helper.addProduction("F -> ( E )");
-		helper.addProduction("F -> id");
+		helper.defineProduction("E -> E + T");
+		helper.defineProduction("E -> T");
+		helper.defineProduction("T -> T * F");
+		helper.defineProduction("T -> F");
+		helper.defineProduction("F -> ( E )");
+		helper.defineProduction("F -> id");
 		
 		Grammar grammar = helper.getGrammar("E");
 		

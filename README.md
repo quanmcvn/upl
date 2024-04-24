@@ -10,9 +10,13 @@ To run
 $ ant run
 ```
 
-To run with the usage if JFlex, add `-Djflex=true`
+To run with the usage of JFlex, add `-Djflex=true`
 
-To run with the usage if Cup, add `-Dcup=true`
+To run with the usage of Cup, add `-Dcup=true`
+
+To run using the bottom up version, add `-Dbottom-up=true`
+
+(Note: `cup` overrides `bottom-up`, so if both of these are `=true` then the cup version will be used)
 
 You can also run it with `-Dcolorful=true` for a better look (it can be broken if your terminal doesn't support it)
 
