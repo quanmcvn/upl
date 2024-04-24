@@ -48,6 +48,7 @@ public class BottomUpParser implements Parser {
 		helper.defineNonTerminal("MultiplicativeExpression");
 		helper.defineNonTerminal("PrimaryExpression");
 		helper.defineNonTerminal("Identifier");
+		helper.defineNonTerminal("Literal");
 		helper.defineTerminal("EOF");
 		helper.defineTerminal("LEFT_PAREN");
 		helper.defineTerminal("RIGHT_PAREN");
@@ -62,6 +63,8 @@ public class BottomUpParser implements Parser {
 		helper.defineTerminal("GREATER_EQUAL");
 		helper.defineTerminal("IDENTIFIER");
 		helper.defineTerminal("NUMBER");
+		helper.defineTerminal("TRUE");
+		helper.defineTerminal("FALSE");
 		helper.defineTerminal("BEGIN");
 		helper.defineTerminal("END");
 		helper.defineTerminal("IF");
@@ -72,11 +75,8 @@ public class BottomUpParser implements Parser {
 		helper.defineTerminal("PRINT");
 		helper.defineTerminal("INT");
 		helper.defineTerminal("BOOL");
-		helper.defineTerminal("ε");
-		helper.defineProduction("Program -> BEGIN Statements END", (symbolValues -> {
-			System.out.println((new TextBox()).print((Statements) symbolValues[1])) ;
-			return symbolValues[1];
-		}));
+//		helper.defineTerminal("ε");
+		helper.defineProduction("Program -> BEGIN Statements END", (symbolValues -> symbolValues[1]));
 		// manually eliminate ε
 		helper.defineProduction("Program -> BEGIN END", (symbolValues -> new Statements(new ArrayList<>())));
 		helper.defineProduction("Statements -> Statement", (symbolValues -> {
@@ -181,15 +181,18 @@ public class BottomUpParser implements Parser {
 			return new BinaryExpression(left, op, right);
 		}));
 		helper.defineProduction("PrimaryExpression -> Identifier", (symbolValues -> symbolValues[0]));
-		helper.defineProduction("PrimaryExpression -> NUMBER", (symbolValues -> {
-			Token num = (Token) symbolValues[0];
-			return new Literal(num.getValue(), num.getLocation());
-		}));
+		helper.defineProduction("PrimaryExpression -> Literal", (symbolValues -> symbolValues[0]));
 		helper.defineProduction("PrimaryExpression -> LEFT_PAREN Expression RIGHT_PAREN", (symbolValues -> new Grouping((Expression) symbolValues[0])));
 		helper.defineProduction("Identifier -> IDENTIFIER", (symbolValues -> {
 			Token id = (Token) symbolValues[0];
 			return new Variable(new Token(TokenType.IDENTIFIER, Parser.magicKeyword, id.getLine(), id.getLine()), id);
 		}));
+		helper.defineProduction("Literal -> NUMBER", (symbolValues -> {
+			Token num = (Token) symbolValues[0];
+			return new Literal(num.getValue(), num.getLocation());
+		}));
+		helper.defineProduction("Literal -> TRUE", (symbolValues -> new Literal(true, ((Token) symbolValues[0]).getLocation())));
+		helper.defineProduction("Literal -> FALSE", (symbolValues -> new Literal(false, ((Token) symbolValues[0]).getLocation())));
 //		helper.defineNonTerminal("E");
 //		helper.defineNonTerminal("T");
 //		helper.defineNonTerminal("F");

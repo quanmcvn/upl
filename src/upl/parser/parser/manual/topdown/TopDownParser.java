@@ -206,7 +206,7 @@ public class TopDownParser implements Parser {
 	}
 	
 	private Expression primary() {
-		if (match(NUMBER)) {
+		if (match(NUMBER, TRUE, FALSE)) {
 			return new Literal(previous().getValue(), previous().getLocation());
 		}
 		

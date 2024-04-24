@@ -12,7 +12,7 @@ public enum TokenType {
 	GREATER, GREATER_EQUAL,
 	
 	// Literals.
-	IDENTIFIER, NUMBER,
+	IDENTIFIER, NUMBER, TRUE, FALSE,
 	
 	// Keywords.
 	BEGIN, END, IF, THEN, ELSE, DO, WHILE, PRINT,

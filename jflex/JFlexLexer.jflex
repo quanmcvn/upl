@@ -39,6 +39,8 @@ EndOfLineComment     = "//" {InputCharacter}*
 "print" { return new Token(PRINT, yytext(), null, yyline + 1, yycolumn); }
 "do" { return new Token(DO, yytext(), null, yyline + 1, yycolumn); }
 "while" { return new Token(WHILE, yytext(), null, yyline + 1, yycolumn); }
+"true" { return new Token(TRUE, yytext(), true, yyline + 1, yycolumn); }
+"false" { return new Token(FALSE, yytext(), false, yyline + 1, yycolumn); }
 {TypeSpecifier} {
 	if (yytext().equals("int")) return new Token(INT, yytext(), null, yyline + 1, yycolumn);
 	else if (yytext().equals("bool")) return new Token(BOOL, yytext(), null, yyline + 1, yycolumn);

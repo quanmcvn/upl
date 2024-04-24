@@ -12,29 +12,29 @@ public class Production implements Comparable<Production> {
 	 *  <br>
 	 *  When a production is reduced (by BottomUpParser), then its code will be called
 	 */
-	public interface NonTerminalReducer {
+	public interface NonTerminalValueReducer {
 		Object reduce(Object[] symbolValues);
 	}
-	public static final NonTerminalReducer nullReducer = symbolValues -> null;
+	public static final NonTerminalValueReducer nullReducer = symbolValues -> null;
 	public final NonTerminal left;
 	public final List<Symbol> right;
-	public final NonTerminalReducer nonTerminalReducer;
+	public final NonTerminalValueReducer nonTerminalValueReducer;
 	public Production(NonTerminal left, List<Symbol> right) {
 		this.left = left;
 		this.right = right;
-		this.nonTerminalReducer = nullReducer;
+		this.nonTerminalValueReducer = nullReducer;
 	}
 	public Production(NonTerminal left, Symbol... symbols) {
 		this.left = left;
 		this.right = new ArrayList<>();
 		right.addAll(Arrays.asList(symbols));
-		this.nonTerminalReducer = nullReducer;
+		this.nonTerminalValueReducer = nullReducer;
 	}
 	
-	public Production(NonTerminal left, List<Symbol> right, NonTerminalReducer nonTerminalReducer) {
+	public Production(NonTerminal left, List<Symbol> right, NonTerminalValueReducer nonTerminalValueReducer) {
 		this.left = left;
 		this.right = right;
-		this.nonTerminalReducer = nonTerminalReducer;
+		this.nonTerminalValueReducer = nonTerminalValueReducer;
 	}
 	
 	@Override
@@ -90,6 +90,6 @@ public class Production implements Comparable<Production> {
 		for (int i = 0; i < symbols.length; ++ i) {
 			symbolValues[i] = symbols[i].object;
 		}
-		return new NonTerminal(left.toString(), nonTerminalReducer.reduce(symbolValues));
+		return new NonTerminal(left.toString(), nonTerminalValueReducer.reduce(symbolValues));
 	}
 }

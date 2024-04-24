@@ -2,7 +2,7 @@ $$ Program \rightarrow \textbf{begin} \ Statements \ \textbf{end}  $$
 
 $$ Statements \rightarrow \begin{equation*} \begin{aligned}
 & \epsilon \\
-& Statement \  Statements
+& Statements \  Statement
 \end{aligned} \end{equation*}
 $$
 
@@ -127,8 +127,16 @@ $$ -->
 $$ PrimaryExpression \rightarrow \begin{equation*} \begin{aligned}
 
 & \boldsymbol{Identifier} \\
-& \boldsymbol{Number} \\
+& Literal \\
 & \textbf{(} \ Expression \ \textbf{)}
+
+\end{aligned} \end{equation*}
+$$
+
+$$ Literal \rightarrow \begin{equation*} \begin{aligned}
+& \boldsymbol{Number} \\
+& \textbf{true} \\
+& \textbf{false} \\
 
 \end{aligned} \end{equation*}
 $$

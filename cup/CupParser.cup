@@ -62,6 +62,8 @@ terminal String IDENTIFIER;
 
 terminal Integer NUMBER;
 
+terminal TRUE, FALSE;
+
 terminal BEGIN, END, IF, THEN, ELSE, DO, WHILE, PRINT ;
 terminal INT, BOOL ;
 
@@ -79,6 +81,7 @@ non terminal Entry<Token, Expression> InitDeclarator; // a little bit of trollin
 non terminal Expression Expression;
 non terminal Expression EqualityExpression, RelationalExpression, AdditiveExpression, MultiplicativeExpression;
 non terminal Expression PrimaryExpression;
+non terminal Literal Literal;
 
 non terminal Variable Identifier; // for easy use
 
@@ -227,8 +230,12 @@ MultiplicativeExpression ::= PrimaryExpression:expression                       
                            ;
 
 PrimaryExpression ::= Identifier:id                                                                {: RESULT = id; :}
-                    | NUMBER:num                                                                   {: RESULT = new Literal(num, new upl.lexer.Location(numxleft.getLine(), numxleft.getColumn())); :}
+                    | Literal:literal                                                              {: RESULT = literal; :}
                     | LEFT_PAREN Expression:expression RIGHT_PAREN1                                 {: RESULT = new Grouping(expression); :}
                     ;
 
+Literal ::= NUMBER:num                                                                   {: RESULT = new Literal(num, new upl.lexer.Location(numxleft.getLine(), numxleft.getColumn())); :}
+          | TRUE:t                                                                       {: RESULT = new Literal(true, new upl.lexer.Location(txleft.getLine(), txleft.getColumn())); :}
+          | FALSE:f                                                                      {: RESULT = new Literal(false, new upl.lexer.Location(fxleft.getLine(), fxleft.getColumn())); :}
+          ;
 Identifier ::= IDENTIFIER:id                                                                       {: RESULT = new Variable(newToken(TokenType.IDENTIFIER, CupParserWrapper.magicKeyword, idxleft), newToken(TokenType.IDENTIFIER, id, idxleft)); :};

@@ -24,6 +24,8 @@ public class ManualLexer implements ILexer {
 		keywords.put("print",  PRINT);
 		keywords.put("int",    INT);
 		keywords.put("bool",   BOOL);
+		keywords.put("true",   TRUE);
+		keywords.put("false",   FALSE);
 	}
 	private final String source;
 	private final List<Token> tokens = new ArrayList<>();
@@ -160,6 +162,10 @@ public class ManualLexer implements ILexer {
 		String text = source.substring(start, current);
 		TokenType type = keywords.get(text);
 		if (type == null) type = IDENTIFIER;
+		if (type == TRUE || type == FALSE) {
+			addToken(type, Boolean.parseBoolean(source.substring(start, current)));
+			return;
+		}
 		addToken(type);
 	}
 }

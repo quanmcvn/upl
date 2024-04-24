@@ -23,12 +23,13 @@ public class TypeChecker implements Expression.Visitor<String>, Statement.Visito
 				}
 				yield "int";
 			}
-			case EQUAL_EQUAL, GREATER, GREATER_EQUAL -> {
+			case GREATER, GREATER_EQUAL -> {
 				if (!left.equals("int")) {
 					throw Parser.error(expression.operator, String.format("mismatch type: left and right is %s, expected int", left));
 				}
 				yield "bool";
 			}
+			case EQUAL_EQUAL -> "bool";
 			default -> left;
 		};
 	}
