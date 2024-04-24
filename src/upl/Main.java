@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.List;
 
 import upl.lexer.Lexer;
+import upl.lexer.Location;
 import upl.lexer.Token;
 import upl.parser.Parser;
 import upl.parser.parser.automatic.CupParserWrapper;
@@ -16,6 +17,9 @@ public class Main{
 	private static String filename = null;
 	public static String getFilename() { return filename; }
 	static boolean hasCompileError = false;
+	public static void error(String message) {
+		System.err.println(message);
+	}
 	public static void error(int line, int column, String message) {
 		System.err.printf("Error: %s at %d:%d\n", message, line, column);
 	}
@@ -26,7 +30,11 @@ public class Main{
 		System.err.printf("[%d:%d] Error %s : %s\n", line, column, where, message);
 	}
 	public static void compileError(Token token, String message) {
-		error(token.line, token.column, String.format("at '%s'", token.lexeme), message);
+		error(token.getLine(), token.getColumn(), String.format("at '%s'", token.getLexeme()), message);
+		hasCompileError = true;
+	}
+	public static void compileError(Location location, String message) {
+		error(location.line(), location.column(), message);
 		hasCompileError = true;
 	}
 	

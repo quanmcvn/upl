@@ -1,6 +1,7 @@
 package upl.parser.general.expression;
 
 import upl.lexer.Token;
+import upl.lexer.Location;
 
 public class Variable extends Expression {
 	public final Token type;

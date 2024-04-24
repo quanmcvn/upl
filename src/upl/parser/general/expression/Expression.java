@@ -1,5 +1,8 @@
 package upl.parser.general.expression;
 
+import upl.lexer.Token;
+import upl.lexer.Location;
+
 public abstract class Expression {
 	public interface Visitor<R> {
 		R visitBinaryExpression(BinaryExpression expression);

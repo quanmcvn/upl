@@ -1,5 +1,8 @@
 package upl.parser.general.expression;
 
+import upl.lexer.Token;
+import upl.lexer.Location;
+
 public class Grouping extends Expression {
 	public final Expression expression;
 	public Grouping (Expression expression) {

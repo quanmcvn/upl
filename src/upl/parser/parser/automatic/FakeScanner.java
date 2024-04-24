@@ -30,23 +30,23 @@ public class FakeScanner implements Scanner {
 		
 //		System.out.printf("feeding %s...\n", token);
 		
-		ComplexSymbolFactory.Location left = new ComplexSymbolFactory.Location(filename, token.line, token.column);
-		ComplexSymbolFactory.Location right = new ComplexSymbolFactory.Location(filename, token.line, token.column + token.lexeme.length() - 1);
+		ComplexSymbolFactory.Location left = new ComplexSymbolFactory.Location(filename, token.getLine(), token.getColumn());
+		ComplexSymbolFactory.Location right = new ComplexSymbolFactory.Location(filename, token.getLine(), token.getColumn() + token.getLexeme().length() - 1);
 		
 		int id = -1;
 		for (int i = 0; i < CupParserSym.terminalNames.length; ++ i) {
-			if (CupParserSym.terminalNames[i].equals(token.type.name())) {
+			if (CupParserSym.terminalNames[i].equals(token.getType().name())) {
 				id = i;
 				break;
 			}
 		}
 		
-		if (token.value != null) {
-			return sf.newSymbol(token.type.name(), id, left, right, token.value);
-		} else if (token.type == TokenType.IDENTIFIER) {
-			return sf.newSymbol(token.type.name(), id, left, right, token.lexeme);
+		if (token.getValue() != null) {
+			return sf.newSymbol(token.getType().name(), id, left, right, token.getValue());
+		} else if (token.getType() == TokenType.IDENTIFIER) {
+			return sf.newSymbol(token.getType().name(), id, left, right, token.getLexeme());
 		} else {
-			return sf.newSymbol(token.type.name(), id, left, right);
+			return sf.newSymbol(token.getType().name(), id, left, right);
 		}
 	}
 }

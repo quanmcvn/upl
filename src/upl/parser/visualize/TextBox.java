@@ -1,5 +1,6 @@
 package upl.parser.visualize;
 
+import upl.lexer.Location;
 import upl.lexer.Token;
 import upl.lexer.TokenType;
 import upl.parser.general.expression.*;
@@ -104,7 +105,7 @@ public class TextBox implements Expression.Visitor<TextBox>, Statement.Visitor<T
 	@Override
 	public TextBox visitBinaryExpression(BinaryExpression expression) {
 		TextBox res = new TextBox();
-		res.putLine(String.format("binary \"%s\"", expression.operator.lexeme), 0, 0);
+		res.putLine(String.format("binary \"%s\"", expression.operator.getLexeme()), 0, 0);
 		TextBox left = expression.left.accept(this);
 		TextBox right = expression.right.accept(this);
 		
@@ -122,7 +123,7 @@ public class TextBox implements Expression.Visitor<TextBox>, Statement.Visitor<T
 	@Override
 	public TextBox visitUnaryExpression(UnaryExpression expression) {
 		TextBox res = new TextBox();
-		String atom = String.format("unary \"%s\"", expression.operator.lexeme);
+		String atom = String.format("unary \"%s\"", expression.operator.getLexeme());
 		res.putLine(atom, 0, 0);
 		TextBox child = expression.expression.accept(this);
 		
@@ -156,9 +157,9 @@ public class TextBox implements Expression.Visitor<TextBox>, Statement.Visitor<T
 	@Override
 	public TextBox visitVariable(Variable expression) {
 		TextBox res = new TextBox();
-		String atom = String.format("ident `%s`", expression.type.lexeme);
+		String atom = String.format("ident `%s`", expression.type.getLexeme());
 		res.putLine(atom, 0, 0);
-		res.putLine(String.format("\"%s\"",expression.identifier.lexeme), atom.length() + 1, 0);
+		res.putLine(String.format("\"%s\"",expression.identifier.getLexeme()), atom.length() + 1, 0);
 		return res;
 	}
 	
@@ -418,24 +419,24 @@ public class TextBox implements Expression.Visitor<TextBox>, Statement.Visitor<T
 				new Statements(Arrays.asList(
 					new Print(
 							new BinaryExpression(
-									new Literal(123),
+									new Literal(123, new Location(0, 0)),
 									new Token(TokenType.STAR, "*"),
 									new Grouping(
-											new Literal(45.67)))
+											new Literal(45.67, new Location(0, 0))))
 					),
 					new Print(
-							new Literal("Hello world!")
+							new Literal("Hello world!", new Location(0, 0))
 					)
 				)
 				),
 				new BinaryExpression(
 						new BinaryExpression(
-								new Literal(1),
+								new Literal(1, new Location(0, 0)),
 								new Token(TokenType.STAR, "*"),
-								new Literal(1)
+								new Literal(1, new Location(0, 0))
 						),
 						new Token(TokenType.EQUAL_EQUAL, "=="),
-						new Literal(2)
+						new Literal(2, new Location(0, 0))
 				)
 		);
 		

@@ -98,10 +98,11 @@ public class GenAST {
 				"BinaryExpression : Expression left, Token operator, Expression right",
 				"UnaryExpression  : Token operator, Expression expression",
 				"Grouping         : Expression expression",
-				"Literal          : Object value",
+				"Literal          : Object value, Location location",
 				"Variable         : Token type, Token identifier"
 		), Arrays.asList(
-				"upl.lexer.Token"
+				"upl.lexer.Token",
+				"upl.lexer.Location"
 		));
 		genAST.defineAST("upl.parser.general.statement", "Statement", Arrays.asList(
 				"Statements  : List<Statement> statements",

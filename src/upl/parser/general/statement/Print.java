@@ -1,6 +1,9 @@
 package upl.parser.general.statement;
 
+import java.util.List;
+import upl.lexer.Token;
 import upl.parser.general.expression.Expression;
+import upl.parser.general.expression.Variable;
 
 public class Print extends Statement {
 	public final Expression expression;

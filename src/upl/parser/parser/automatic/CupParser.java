@@ -11,7 +11,6 @@ import upl.lexer.Token;
 import upl.lexer.TokenType;
 import upl.parser.general.expression.*;
 import upl.parser.general.statement.*;
-import upl.parser.parser.automatic.MyLocation;
 import upl.parser.parser.automatic.MyComplexSymbolFactory;
 import upl.parser.parser.automatic.MyComplexSymbol;
 import upl.parser.visualize.TextBox;
@@ -391,7 +390,7 @@ class CUP$CupParser$actions {
 		Location exleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$CupParser$stack.peek()).xleft;
 		Location exright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$CupParser$stack.peek()).xright;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$CupParser$stack.peek()).value;
-		 CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here"); 
+		 CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here", new upl.lexer.Location(exleft.getLine(), exleft.getColumn())); 
               CUP$CupParser$result = parser.getSymbolFactory().newSymbol("RelationalExpression1",30, ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);
             }
           return CUP$CupParser$result;
@@ -415,7 +414,7 @@ class CUP$CupParser$actions {
 		Location exleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$CupParser$stack.peek()).xleft;
 		Location exright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$CupParser$stack.peek()).xright;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$CupParser$stack.peek()).value;
-		 CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here"); 
+		 CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here", new upl.lexer.Location(exleft.getLine(), exleft.getColumn())); 
               CUP$CupParser$result = parser.getSymbolFactory().newSymbol("AdditiveExpression1",31, ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);
             }
           return CUP$CupParser$result;
@@ -439,7 +438,7 @@ class CUP$CupParser$actions {
 		Location exleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$CupParser$stack.peek()).xleft;
 		Location exright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$CupParser$stack.peek()).xright;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$CupParser$stack.peek()).value;
-		 CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here"); 
+		 CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here", new upl.lexer.Location(exleft.getLine(), exleft.getColumn())); 
               CUP$CupParser$result = parser.getSymbolFactory().newSymbol("MultiplicativeExpression1",32, ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);
             }
           return CUP$CupParser$result;
@@ -463,7 +462,7 @@ class CUP$CupParser$actions {
 		Location exleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$CupParser$stack.peek()).xleft;
 		Location exright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$CupParser$stack.peek()).xright;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$CupParser$stack.peek()).value;
-		 CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here"); 
+		 CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here", new upl.lexer.Location(exleft.getLine(), exleft.getColumn())); 
               CUP$CupParser$result = parser.getSymbolFactory().newSymbol("PrimaryExpression1",33, ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);
             }
           return CUP$CupParser$result;
@@ -1127,7 +1126,7 @@ class CUP$CupParser$actions {
 		Location numxleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$CupParser$stack.peek()).xleft;
 		Location numxright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$CupParser$stack.peek()).xright;
 		Integer num = (Integer)((java_cup.runtime.Symbol) CUP$CupParser$stack.peek()).value;
-		 RESULT = new Literal(num); 
+		 RESULT = new Literal(num, new upl.lexer.Location(numxleft.getLine(), numxleft.getColumn())); 
               CUP$CupParser$result = parser.getSymbolFactory().newSymbol("PrimaryExpression",16, ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);
             }
           return CUP$CupParser$result;

@@ -93,7 +93,7 @@ public class ManualLexer implements ILexer {
 			scanToken();
 		}
 		if (tokens.isEmpty()) tokens.add(new Token(EOF, "EOF", null, 0, 0));
-		else tokens.add(new Token(EOF, "EOF", null, tokens.get(tokens.size() - 1).line, tokens.get(tokens.size() - 1).column));
+		else tokens.add(new Token(EOF, "EOF", null, tokens.get(tokens.size() - 1).getLine(), tokens.get(tokens.size() - 1).getColumn()));
 		return tokens;
 	}
 	

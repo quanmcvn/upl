@@ -10,9 +10,12 @@ import java.util.List;
 
 public class Environment {
 	public static class EnvironmentEntry {
-		public final Token type;
+		private final Token type;
 		private EnvironmentEntry(Token type) {
 			this.type = type;
+		}
+		public Token getType() {
+			return type;
 		}
 		@Override
 		public String toString() {
@@ -33,24 +36,24 @@ public class Environment {
 		if (parent != null) parent.environmentList.add(this);
 	}
 	public EnvironmentEntry get(Token name) {
-		if (values.containsKey(name.lexeme)) {
-			return values.get(name.lexeme);
+		if (values.containsKey(name.getLexeme())) {
+			return values.get(name.getLexeme());
 		}
 		if (parent != null) return parent.get(name);
-		throw new CompileTimeError(name, String.format("identifier \"%s\" is undefined", name.lexeme));
+		throw new CompileTimeError(name, String.format("identifier \"%s\" is undefined", name.getLexeme()));
 	}
 	
 	public void define(Token name, Token type) {
 		EnvironmentEntry entry = newEntry(type);
-		if (values.containsKey(name.lexeme)) {
-			EnvironmentEntry prev = values.get(name.lexeme);
-			if (prev.type.lexeme.equals(entry.type.lexeme)) {
-				throw new CompileTimeError(name, String.format("redeclaration of \"%s %s\"\nnote: previously declared at line %d", entry.type.lexeme, name.lexeme, prev.type.line));
+		if (values.containsKey(name.getLexeme())) {
+			EnvironmentEntry prev = values.get(name.getLexeme());
+			if (prev.type.getLexeme().equals(entry.type.getLexeme())) {
+				throw new CompileTimeError(name, String.format("redeclaration of \"%s %s\"\nnote: previously declared at line %d", entry.type.getLexeme(), name.getLexeme(), prev.type.getLine()));
 			} else {
-				throw new CompileTimeError(name, String.format("conflicting declaration of \"%s %s\"\nnote: previously declared as \"%s %s\" at line %d",  entry.type.lexeme, name.lexeme, prev.type.lexeme, name.lexeme, prev.type.line));
+				throw new CompileTimeError(name, String.format("conflicting declaration of \"%s %s\"\nnote: previously declared as \"%s %s\" at line %d",  entry.type.getLexeme(), name.getLexeme(), prev.type.getLexeme(), name.getLexeme(), prev.type.getLine()));
 			}
 		}
-		values.put(name.lexeme, entry);
+		values.put(name.getLexeme(), entry);
 	}
 	private Environment ancestor(int distance) {
 		Environment environment = this;

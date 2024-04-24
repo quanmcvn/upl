@@ -6,6 +6,7 @@ import upl.lexer.Token;
 import upl.lexer.TokenType;
 import upl.parser.context.Environment;
 import upl.parser.Parser;
+import upl.parser.context.TypeChecker;
 import upl.parser.general.expression.*;
 import upl.parser.general.statement.*;
 
@@ -33,9 +34,10 @@ public class TopDownParser implements Parser {
 			if (statements != null) break;
 		}
 		while (!isAtEnd()) {
-			Main.compileError(peek(), String.format("unexpected '%s' after 'end'", peek().lexeme));
+			Main.compileError(peek(), String.format("unexpected '%s' after 'end'", peek().getLexeme()));
 			advance();
 		}
+		
 		return statements;
 	}
 	
@@ -47,7 +49,9 @@ public class TopDownParser implements Parser {
 				statements.add(statement());
 			}
 			consume(END, "expected an 'end'");
-			return new Statements(statements);
+			Statements program = new Statements(statements);
+			new TypeChecker().check(program);
+			return program;
 		} catch (CompileTimeError e) {
 			skipUntilNextStatement();
 			return null;
@@ -141,7 +145,7 @@ public class TopDownParser implements Parser {
 	
 	private Assignment assignmentStatement() {
 		Token identifier = consume(IDENTIFIER, "expected an identifier (assignment)");
-		Variable variable = new Variable(environment.get(identifier).type, identifier);
+		Variable variable = new Variable(environment.get(identifier).getType(), identifier);
 		consume(EQUAL, "expected a '='");
 		Expression expression = expression();
 		consume(SEMICOLON, "expected a ';'");
@@ -203,11 +207,11 @@ public class TopDownParser implements Parser {
 	
 	private Expression primary() {
 		if (match(NUMBER)) {
-			return new Literal(previous().value);
+			return new Literal(previous().getValue(), previous().getLocation());
 		}
 		
 		if (match(IDENTIFIER)) {
-			return new Variable(environment.get(previous()).type, previous());
+			return new Variable(environment.get(previous()).getType(), previous());
 		}
 		
 		if (match(LEFT_PAREN)) {
@@ -236,14 +240,14 @@ public class TopDownParser implements Parser {
 	}
 	private boolean check(TokenType type) {
 		if (isAtEnd()) return false;
-		return peek().type == type;
+		return peek().getType() == type;
 	}
 	private Token advance() {
 		if (!isAtEnd()) current++;
 		return previous();
 	}
 	private boolean isAtEnd() {
-		return peek().type == EOF;
+		return peek().getType() == EOF;
 	}
 	
 	private Token peek() {
@@ -266,12 +270,12 @@ public class TopDownParser implements Parser {
 	private void skipUntilNextStatement() {
 		advance();
 		while (!isAtEnd()) {
-			if (peek().type == SEMICOLON) {
+			if (peek().getType() == SEMICOLON) {
 				advance();
 				return;
 			}
 			
-			switch (peek().type) {
+			switch (peek().getType()) {
 				case INT:
 				case BOOL:
 				case IF:

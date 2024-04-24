@@ -19,7 +19,7 @@ public class JFlexLexerWrapper implements ILexer {
 				Token lastToken = jFlexLexer.yylex();
 				if (lastToken == null) continue;
 				tokenList.add(lastToken);
-				if (lastToken.type == TokenType.EOF) break;
+				if (lastToken.getType() == TokenType.EOF) break;
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}

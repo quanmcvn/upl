@@ -104,7 +104,7 @@ public class GrammarBuilderHelper {
 	
 	public Grammar getGrammar(String start) {
 		// eof is defined implicitly
-		defineTerminalFromTokenType(Grammar.eof.token.type, "$");
+		defineTerminalFromTokenType(Grammar.eof.token.getType(), "$");
 		return new Grammar(getNonTerminal(start), nonTerminalList, terminalList, productionList);
 	}
 }

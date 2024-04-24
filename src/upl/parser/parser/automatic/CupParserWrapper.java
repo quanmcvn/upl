@@ -6,6 +6,7 @@ import upl.lexer.Token;
 import upl.parser.context.ContextChecker;
 import upl.parser.context.Environment;
 import upl.parser.Parser;
+import upl.parser.context.TypeChecker;
 import upl.parser.general.statement.Statements;
 import upl.parser.visualize.TextBox;
 
@@ -38,6 +39,7 @@ public class CupParserWrapper implements Parser {
 		Statements program = parser.program;
 		ContextChecker contextChecker = new ContextChecker(program);
 		program = contextChecker.check();
+		new TypeChecker().check(program);
 		
 		this.environment = contextChecker.getEnvironment();
 		return program;

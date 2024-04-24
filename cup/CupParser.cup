@@ -6,7 +6,6 @@ import upl.lexer.Token;
 import upl.lexer.TokenType;
 import upl.parser.general.expression.*;
 import upl.parser.general.statement.*;
-import upl.parser.parser.automatic.MyLocation;
 import upl.parser.parser.automatic.MyComplexSymbolFactory;
 import upl.parser.parser.automatic.MyComplexSymbol;
 import upl.parser.visualize.TextBox;
@@ -105,19 +104,19 @@ non terminal Expression PrimaryExpression1; // error
 start with Program ;
 
 //EqualityExpression1 ::= EqualityExpression:e {: RESULT = e; :}
-//                    | error:e {: CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here"); :}
+//                    | error:e {: CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here", new upl.lexer.Location(exleft.getLine(), exleft.getColumn())); :}
 //                    ;
 RelationalExpression1 ::= RelationalExpression:e {: RESULT = e; :}
-                    | error:e {: CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here"); :}
+                    | error:e {: CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here", new upl.lexer.Location(exleft.getLine(), exleft.getColumn())); :}
                     ;
 AdditiveExpression1 ::= AdditiveExpression:e {: RESULT = e; :}
-                    | error:e {: CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here"); :}
+                    | error:e {: CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here", new upl.lexer.Location(exleft.getLine(), exleft.getColumn())); :}
                     ;
 MultiplicativeExpression1 ::= MultiplicativeExpression:e {: RESULT = e; :}
-                    | error:e {: CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here"); :}
+                    | error:e {: CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here", new upl.lexer.Location(exleft.getLine(), exleft.getColumn())); :}
                     ;
 PrimaryExpression1 ::= PrimaryExpression:e {: RESULT = e; :}
-                    | error:e {: CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here"); :}
+                    | error:e {: CupParser.errorLog(exleft, "expected an expression"); RESULT = new Literal("error was here", new upl.lexer.Location(exleft.getLine(), exleft.getColumn())); :}
                     ;
 
 LEFT_PAREN1 ::= LEFT_PAREN
@@ -228,7 +227,7 @@ MultiplicativeExpression ::= PrimaryExpression:expression                       
                            ;
 
 PrimaryExpression ::= Identifier:id                                                                {: RESULT = id; :}
-                    | NUMBER:num                                                                   {: RESULT = new Literal(num); :}
+                    | NUMBER:num                                                                   {: RESULT = new Literal(num, new upl.lexer.Location(numxleft.getLine(), numxleft.getColumn())); :}
                     | LEFT_PAREN Expression:expression RIGHT_PAREN1                                 {: RESULT = new Grouping(expression); :}
                     ;
 

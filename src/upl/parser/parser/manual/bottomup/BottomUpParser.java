@@ -7,6 +7,7 @@ import upl.lexer.TokenType;
 import upl.parser.context.ContextChecker;
 import upl.parser.context.Environment;
 import upl.parser.Parser;
+import upl.parser.context.TypeChecker;
 import upl.parser.general.expression.*;
 import upl.parser.general.statement.*;
 import upl.parser.grammar.*;
@@ -182,12 +183,12 @@ public class BottomUpParser implements Parser {
 		helper.defineProduction("PrimaryExpression -> Identifier", (symbolValues -> symbolValues[0]));
 		helper.defineProduction("PrimaryExpression -> NUMBER", (symbolValues -> {
 			Token num = (Token) symbolValues[0];
-			return new Literal(num.value);
+			return new Literal(num.getValue(), num.getLocation());
 		}));
 		helper.defineProduction("PrimaryExpression -> LEFT_PAREN Expression RIGHT_PAREN", (symbolValues -> new Grouping((Expression) symbolValues[0])));
 		helper.defineProduction("Identifier -> IDENTIFIER", (symbolValues -> {
 			Token id = (Token) symbolValues[0];
-			return new Variable(new Token(TokenType.IDENTIFIER, Parser.magicKeyword, id.line, id.column), id);
+			return new Variable(new Token(TokenType.IDENTIFIER, Parser.magicKeyword, id.getLine(), id.getLine()), id);
 		}));
 //		helper.defineNonTerminal("E");
 //		helper.defineNonTerminal("T");
@@ -221,7 +222,7 @@ public class BottomUpParser implements Parser {
 			Statements program = doParse();
 			ContextChecker contextChecker = new ContextChecker(program);
 			program = contextChecker.check();
-			
+			new TypeChecker().check(program);
 			this.environment = contextChecker.getEnvironment();
 			return program;
 		} catch (CompileTimeError ignore) {
@@ -252,7 +253,7 @@ public class BottomUpParser implements Parser {
 			int state = states.peek();
 			Action action = table.action.get(state).get(terminal);
 			if (action == null) { // error
-				throw Parser.error(input.peek(), String.format("unexpected '%s'\n", input.peek().lexeme));
+				throw Parser.error(input.peek(), String.format("unexpected '%s'\n", input.peek().getLexeme()));
 			}
 			if (action.actionType() == ActionType.SHIFT) {
 				int j = action.number();
@@ -291,7 +292,7 @@ public class BottomUpParser implements Parser {
 	public BottomUpParser(List<Token> tokenList) {
 		this.tokenList = new ArrayList<>();
 		this.tokenList.addAll(tokenList);
-		if (this.tokenList.get(this.tokenList.size() - 1).type != TokenType.EOF) {
+		if (this.tokenList.get(this.tokenList.size() - 1).getType() != TokenType.EOF) {
 			this.tokenList.add(Grammar.eof.token);
 		}
 	}

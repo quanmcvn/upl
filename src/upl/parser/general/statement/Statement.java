@@ -1,5 +1,10 @@
 package upl.parser.general.statement;
 
+import java.util.List;
+import upl.lexer.Token;
+import upl.parser.general.expression.Expression;
+import upl.parser.general.expression.Variable;
+
 public abstract class Statement {
 	public interface Visitor<R> {
 		R visitStatements(Statements statement);

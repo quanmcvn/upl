@@ -18,13 +18,12 @@ import java.util.List;
  */
 public class ContextChecker implements Expression.Visitor<Expression>, Statement.Visitor<Statement> {
 	private Environment environment = null;
-	private final Statements program;
-	
+	private final Statement program;
 	public Environment getEnvironment() {
 		return environment;
 	}
 	
-	public ContextChecker(Statements program) {
+	public ContextChecker(Statement program) {
 		this.program = program;
 	}
 	public Statements check() {
@@ -65,9 +64,9 @@ public class ContextChecker implements Expression.Visitor<Expression>, Statement
 	
 	@Override
 	public Expression visitVariable(Variable expression) {
-		if (expression.type.lexeme.equals(Parser.magicKeyword)) {
+		if (expression.type.getLexeme().equals(Parser.magicKeyword)) {
 			try {
-				Token type = environment.get(expression.identifier).type;
+				Token type = environment.get(expression.identifier).getType();
 				return new Variable(type, expression.identifier);
 			} catch (CompileTimeError error) {
 				return new Variable(new Token(TokenType.IDENTIFIER, "undefined"), expression.identifier);
