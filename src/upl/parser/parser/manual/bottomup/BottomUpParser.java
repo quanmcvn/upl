@@ -16,7 +16,6 @@ import upl.parser.grammar.lr0.ActionType;
 import upl.parser.grammar.lr0.SLRParsingTable;
 import upl.parser.visualize.TextBox;
 
-import javax.swing.*;
 import java.io.InputStreamReader;
 import java.util.Map.Entry;
 import java.util.AbstractMap.SimpleEntry;
@@ -75,22 +74,15 @@ public class BottomUpParser implements Parser {
 		helper.defineTerminal("PRINT");
 		helper.defineTerminal("INT");
 		helper.defineTerminal("BOOL");
-//		helper.defineTerminal("ε");
+		helper.defineTerminal("ε");
 		helper.defineProduction("Program -> BEGIN Statements END", (symbolValues -> symbolValues[1]));
-		// manually eliminate ε
-		helper.defineProduction("Program -> BEGIN END", (symbolValues -> new Statements(new ArrayList<>())));
-		helper.defineProduction("Statements -> Statement", (symbolValues -> {
-			List<Statement> statementList = new ArrayList<>();
-			statementList.add((Statement) symbolValues[0]);
-			return new Statements(statementList);
-		}));
-//		helper.defineProduction("Statements -> ε");
 		helper.defineProduction("Statements -> Statements Statement", (symbolValues -> {
 			Statements statements = (Statements) symbolValues[0];
 			Statement statement = (Statement) symbolValues[1];
 			statements.statements.add(statement);
 			return statements;
 		}));
+		helper.defineProduction("Statements -> ε", (symbolValues -> new Statements(new ArrayList<>())));
 		helper.defineProduction("Statement -> IfThenElseStatement", (symbolValues -> symbolValues[0]));
 		helper.defineProduction("Statement -> DoWhileStatement", (symbolValues -> symbolValues[0]));
 		helper.defineProduction("Statement -> PrintStatement", (symbolValues -> symbolValues[0]));
@@ -102,37 +94,17 @@ public class BottomUpParser implements Parser {
 			Statements elseBranch = (Statements) symbolValues[6];
 			return new IfThenElse(condition, thenBranch, elseBranch);
 		});
-		// manually eliminate ε
-		helper.defineProduction("IfThenElseStatement -> IF Expression THEN LEFT_BRACE Statements RIGHT_BRACE", symbolValues -> {
-			Expression condition = (Expression) symbolValues[1];
-			Statements thenBranch = (Statements) symbolValues[4];
-			return new IfThenElse(condition, thenBranch, null);
-		});
-		helper.defineProduction("IfThenElseStatement -> IF Expression THEN LEFT_BRACE RIGHT_BRACE MaybeElse", symbolValues -> {
-			Expression condition = (Expression) symbolValues[1];
-			Statements elseBranch = (Statements) symbolValues[5];
-			return new IfThenElse(condition, new Statements(new ArrayList<>()), elseBranch);
-		});
-		helper.defineProduction("IfThenElseStatement -> IF Expression THEN LEFT_BRACE RIGHT_BRACE", symbolValues -> {
-			Expression condition = (Expression) symbolValues[1];
-			return new IfThenElse(condition, new Statements(new ArrayList<>()), null);
-		});
-//		helper.defineProduction("MaybeElse -> ε");
-		helper.defineProduction("MaybeElse -> ELSE LEFT_BRACE RIGHT_BRACE", (symbolValues -> new Statements(new ArrayList<>())));
 		helper.defineProduction("MaybeElse -> ELSE LEFT_BRACE Statements RIGHT_BRACE", (symbolValues -> symbolValues[2]));
-		// manually eliminate ε
-		helper.defineProduction("DoWhileStatement -> DO LEFT_BRACE RIGHT_BRACE WHILE LEFT_PAREN Expression RIGHT_PAREN SEMICOLON", symbolValues -> {
-			Expression condition = (Expression) symbolValues[5];
-			return new DoWhile(new Statements(new ArrayList<>()), condition);
-		});
+		helper.defineProduction("MaybeElse -> ε", (symbolValues -> null));
 		helper.defineProduction("DoWhileStatement -> DO LEFT_BRACE Statements RIGHT_BRACE WHILE LEFT_PAREN Expression RIGHT_PAREN SEMICOLON", symbolValues -> {
-			Expression condition = (Expression) symbolValues[6];
 			Statements body = (Statements) symbolValues[2];
+			Expression condition = (Expression) symbolValues[6];
 			return new DoWhile(body, condition);
 		});
 		helper.defineProduction("PrintStatement -> PRINT LEFT_PAREN Expression RIGHT_PAREN SEMICOLON", (symbolValues -> new Print((Expression) symbolValues[2])));
 		helper.defineProduction("DeclarationStatement -> TypeSpecifier InitDeclarator SEMICOLON", (symbolValues -> {
 			Token type = (Token) symbolValues[0];
+			@SuppressWarnings("unchecked")
 			Entry<Token, Expression> decl = (Entry<Token, Expression>) symbolValues[1];
 			return new Declaration(new Variable(type, decl.getKey()), decl.getValue());
 		}));
@@ -206,7 +178,7 @@ public class BottomUpParser implements Parser {
 //		helper.addProduction("T -> F");
 //		helper.addProduction("F -> id");
 //
-		grammar = helper.getGrammar("Program").getAugmentedGrammar();
+		grammar = helper.getGrammar("Program").getEpsilonFreeGrammar().getAugmentedGrammar();
 		grammar.calculateFirstAndFollow();
 		table = new SLRParsingTable(grammar);
 //		System.out.println(table);
@@ -309,7 +281,9 @@ public class BottomUpParser implements Parser {
 			
 			BottomUpParser bottomUpParser = new BottomUpParser(tokens);
 			
-			bottomUpParser.doParse();
+			Statements program = bottomUpParser.doParse();
+			
+			System.out.println((new TextBox()).print(program));
 			//parser.debug_parse();
 		} catch (Exception e) {
 			e.printStackTrace();

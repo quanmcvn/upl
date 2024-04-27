@@ -89,35 +89,64 @@ public class Grammar {
 			if (!terminal.equals(Grammar.epsilon)) newTerminalList.add(terminal);
 		}
 		
+		Queue<Production> tobeExamined = new ArrayDeque<>();
+		
 		for (Production production : productionList) {
-			newProductionList.add(production);
-			
 			if (!production.isEpsilonProduction()) {
 				newProductionList.add(production);
 			} else {
-				NonTerminal left = production.left;
-				for (Production production1 : productionList) {
-					boolean hasLeftInRight = false;
-					List<Symbol> right = new ArrayList<>();
-					for (Symbol symbol : production1.right) {
-						if (symbol instanceof NonTerminal nonTerminal) {
-							if (left.equals(nonTerminal)) {
-								hasLeftInRight = true;
-								continue;
-							}
-						}
-						right.add(symbol);
-					}
-					if (hasLeftInRight) {
-						Production newProduction = new Production(production1.left, right);
-						System.out.printf("new production: %s\n", newProduction);
-						newProductionList.add(newProduction);
-					}
-				}
+				tobeExamined.add(production);
 			}
+		}
+		while (!tobeExamined.isEmpty()) {
+			Production epsilonProduction = tobeExamined.poll();
+			// X -> ε
+			NonTerminal toBeRemoved = epsilonProduction.left;
+			List<Production> tobeAdded = new ArrayList<>();
+			for (Production relevantProduction : newProductionList) {
+				List<Symbol> newRight = new ArrayList<>();
+				Set<Integer> indices = new TreeSet<>();
+				// Y -> ? ? X ? ?
+				// = Y -> ? ? ? ?
+				for (int i = 0; i < relevantProduction.right.size(); ++ i) {
+					Symbol symbol = relevantProduction.right.get(i);
+					if (symbol instanceof NonTerminal nonTerminal) {
+						if (nonTerminal.equals(toBeRemoved)) {
+							indices.add(i);
+							continue;
+						}
+					}
+					newRight.add(symbol);
+				}
+				if (indices.isEmpty()) continue;
+				Production.NonTerminalValueReducer newReducer = getNewNonTerminalValueReducer(relevantProduction, epsilonProduction, indices);
+				Production newProduction = new Production(relevantProduction.left, newRight, newReducer);
+//				System.out.printf("new production: %s\n", newProduction);
+				if (newProduction.isEpsilonProduction()) {
+					throw new RuntimeException("new Production is still epsilon production ???");
+				}
+				tobeAdded.add(newProduction);
+			}
+			newProductionList.addAll(tobeAdded);
 		}
 		
 		return new Grammar(start, nonTerminalList, newTerminalList, newProductionList);
+	}
+	
+	private static Production.NonTerminalValueReducer getNewNonTerminalValueReducer(Production relevantProduction, Production epsilonProduction, Set<Integer> indices) {
+		final Production.NonTerminalValueReducer epsilonReducer = epsilonProduction.nonTerminalValueReducer;
+		return (symbolValues -> {
+			int current = 0;
+			Object[] objectGiveToRelevantReducer = new Object[relevantProduction.right.size()];
+			for (int j = 0; j < relevantProduction.right.size(); ++ j) {
+				if (indices.contains(j)) {
+					objectGiveToRelevantReducer[j] = epsilonReducer.reduce(new Object[0]);
+				} else {
+					objectGiveToRelevantReducer[j] = symbolValues[current++];
+				}
+			}
+			return relevantProduction.nonTerminalValueReducer.reduce(objectGiveToRelevantReducer);
+		});
 	}
 	
 	public Grammar getAugmentedGrammar() {
