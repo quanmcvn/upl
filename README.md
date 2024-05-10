@@ -46,10 +46,13 @@ The (current) grammar is in [context-free-grammar.pdf](./context-free-grammar.pd
 
 <h2>Main feature</h2>
 
-- Use both top down and bottom up, with bottom up is fully automatic*
+- Use both top down and bottom up, with bottom up is fully automatic* **
 - Also use automatic parser generator Cup
 
-Note: *With hardcoded grammar & SDT
+Note: 
+*With hardcoded grammar & SDT
+
+**The parse table is created everytime since I don't have a good way to include both the SDT and the table
 
 <h2>Group member</h2>
 
