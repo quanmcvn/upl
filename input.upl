@@ -1,9 +1,9 @@
 begin
-bool w = false;
-do {
-int x;
-x = 1;
-int y = 1 + x;
-bool z = true;
-} while (w == false);
+
+int x = 1;
+bool y = false;
+if x == y then {
+
+}
+
 end

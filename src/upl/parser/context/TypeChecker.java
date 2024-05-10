@@ -5,6 +5,11 @@ import upl.parser.Parser;
 import upl.parser.general.expression.*;
 import upl.parser.general.statement.*;
 
+/**
+ * Checking type of expression:
+ * <br>
+ * eg: int + bool results in compile error
+ */
 public class TypeChecker implements Expression.Visitor<String>, Statement.Visitor<String> {
 	public void check(Statement statement) {
 		statement.accept(this);
@@ -85,7 +90,7 @@ public class TypeChecker implements Expression.Visitor<String>, Statement.Visito
 		String type = statement.condition.accept(this);
 		if (!type.equals("bool")) {
 			Location location = new LocationGetter().getLocation(statement.condition);
-			throw Parser.error(location, String.format("expected bool, got '%s' as if's condition", type));
+			throw Parser.error(location, String.format("expected bool, got '%s' as do while's condition", type));
 		}
 		statement.body.accept(this);
 		return null;
@@ -104,7 +109,7 @@ public class TypeChecker implements Expression.Visitor<String>, Statement.Visito
 			String exprType = statement.initializer.accept(this);
 			if (!type.equals(exprType)) {
 				throw Parser.error(new LocationGetter().getLocation(statement.initializer),
-						String.format("%s is type %s but tried to assign expression type %s",
+						String.format("%s is type %s but tried to init expression type %s",
 								statement.variable.identifier.getLexeme(),
 								type,
 								exprType

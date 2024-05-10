@@ -4,6 +4,7 @@ import upl.CompileTimeError;
 import upl.Main;
 import upl.lexer.Token;
 import upl.lexer.TokenType;
+import upl.parser.context.ContextChecker;
 import upl.parser.context.Environment;
 import upl.parser.Parser;
 import upl.parser.context.TypeChecker;
@@ -17,16 +18,18 @@ import static upl.lexer.TokenType.*;
 
 public class TopDownParser implements Parser {
 	private final List<Token> tokens;
-	private Environment environment = new Environment();
+	private Environment environment = null;
 	private int current = 0;
 	public TopDownParser(List<Token> tokens) {
 		this.tokens = tokens;
 	}
 	
+	@Override
 	public Environment getEnvironment() {
 		return environment;
 	}
 	
+	@Override
 	public Statements parse() {
 		Statements statements = null;
 		while (!isAtEnd()) {
@@ -37,7 +40,6 @@ public class TopDownParser implements Parser {
 			Main.compileError(peek(), String.format("unexpected '%s' after 'end'", peek().getLexeme()));
 			advance();
 		}
-		
 		return statements;
 	}
 	
@@ -46,11 +48,15 @@ public class TopDownParser implements Parser {
 			consume(BEGIN, "expected a 'begin'");
 			List<Statement> statements = new ArrayList<>();
 			while (!check(END) && !isAtEnd()) {
-				statements.add(statement());
+				Statement statement = statement();
+				if (statement != null) statements.add(statement);
 			}
 			consume(END, "expected an 'end'");
 			Statements program = new Statements(statements);
+			ContextChecker contextChecker = new ContextChecker(program);
+			program = contextChecker.check();
 			new TypeChecker().check(program);
+			this.environment = contextChecker.getEnvironment();
 			return program;
 		} catch (CompileTimeError e) {
 			skipUntilNextStatement();
@@ -60,13 +66,13 @@ public class TopDownParser implements Parser {
 	
 	private Statements block() {
 		consume(LEFT_BRACE, "expected a '{' at the begin of a block");
-		environment = new Environment(environment);
+//		environment = new Environment(environment);
 		List<Statement> statements = new ArrayList<>();
 		while (!check(RIGHT_BRACE) && !isAtEnd()) {
 			statements.add(statement());
 		}
 		consume(RIGHT_BRACE, "expected a '}' after block.");
-		environment = environment.parent;
+//		environment = environment.parent;
 		return new Statements(statements);
 	}
 	
@@ -138,14 +144,14 @@ public class TopDownParser implements Parser {
 		
 		Variable variable = new Variable(type, identifier);
 		
-		environment.define(identifier, type);
+//		environment.define(identifier, type);
 		
 		return new Declaration(variable, initializer);
 	}
 	
 	private Assignment assignmentStatement() {
 		Token identifier = consume(IDENTIFIER, "expected an identifier (assignment)");
-		Variable variable = new Variable(environment.get(identifier).getType(), identifier);
+		Variable variable = new Variable(new Token(TokenType.IDENTIFIER, Parser.magicKeyword, identifier.getLine(), identifier.getLine()), identifier);
 		consume(EQUAL, "expected a '='");
 		Expression expression = expression();
 		consume(SEMICOLON, "expected a ';'");
@@ -211,7 +217,8 @@ public class TopDownParser implements Parser {
 		}
 		
 		if (match(IDENTIFIER)) {
-			return new Variable(environment.get(previous()).getType(), previous());
+			Token identifier = previous();
+			return new Variable(new Token(TokenType.IDENTIFIER, Parser.magicKeyword, identifier.getLine(), identifier.getLine()), identifier);
 		}
 		
 		if (match(LEFT_PAREN)) {

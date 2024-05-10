@@ -168,7 +168,7 @@ Expression1 ::= Expression:e {: RESULT = e; :}
 //                    :}
 //             ;
 
-Program ::= BEGIN1 Statements:statements END1                                                     {: program = statements; /* System.out.println((new TextBox()).print(program)); */ :}
+Program ::= BEGIN1 Statements:statements END1                                                     {: program = statements; /* System.out.println("hello from Cup"); */ :}
           ;
 
 Statements ::= Statements:statements Statement1:statement                                        {: if (statement != null) statements.statements.add(statement);

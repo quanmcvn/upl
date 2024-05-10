@@ -14,7 +14,8 @@ import java.util.List;
  * Checking the context:
  * <br>
  * Variable x have to be defined before use (either in this scope or outer, if any)
- * Create a whole new tree again, from given try (because why not)
+ * <br>
+ * Create a whole new tree again, from given tree (because why not)
  */
 public class ContextChecker implements Expression.Visitor<Expression>, Statement.Visitor<Statement> {
 	private Environment environment = null;
@@ -97,7 +98,10 @@ public class ContextChecker implements Expression.Visitor<Expression>, Statement
 	public Statement visitIfThenElse(IfThenElse statement) {
 		Expression condition = statement.condition.accept(this);
 		Statements thenBranch = (Statements) statement.thenBranch.accept(this);
-		Statements elseBranch = (Statements) statement.elseBranch.accept(this);
+		Statements elseBranch = null;
+		if (statement.elseBranch != null) {
+			elseBranch = (Statements) statement.elseBranch.accept(this);
+		}
 		if (condition == statement.condition && thenBranch == statement.thenBranch && elseBranch == statement.elseBranch) return statement;
 		return new IfThenElse(condition, thenBranch, elseBranch);
 	}

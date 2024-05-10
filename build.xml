@@ -72,11 +72,21 @@
       <arg value="--bottom-up=${bottom-up}" />
     </java>
   </target>
+  <target name="run-cup" depends="jar">
+    <java jar="${dist}/Compiler.jar" fork="true" >
+      <arg value="${input}" />
+      <arg value="--jflex=${jflex}" />
+      <arg value="--colorful=${colorful}" />
+      <arg value="--cup=true" />
+    </java>
+  </target>
+  <target name="run-bottom-up" depends="jar">
+    <java jar="${dist}/Compiler.jar" fork="true" >
+      <arg value="${input}" />
+      <arg value="--jflex=${jflex}" />
+      <arg value="--colorful=${colorful}" />
+      <arg value="--bottom-up=true" />
+    </java>
+  </target>
 
-<!--  <target name="clean">-->
-<!--    <delete file="${src}/upl/parser/parser/automatic/CupParser.java" />-->
-<!--    <delete file="${src}/upl/parser/parser/automatic/CupParserSym.java" />-->
-<!--    <delete dir="${classes}" />-->
-<!--    <delete dir="${dist}" />-->
-<!--  </target>-->
 </project>

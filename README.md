@@ -22,6 +22,17 @@ You can also run it with `-Dcolorful=true` for a better look (it can be broken i
 
 eg: run with cup and color `ant run -Dcup=true -Dcolorful=true`
 
+Alternatively, you can
+
+```sh
+ant run-bottom-up
+```
+or
+```sh
+ant run-cup
+```
+to run bottom up and cup, respectively (also support previous arguments)
+
 These runs will take input as file `input.upl` by default.
 You can change it by adding `-Dinput=<yourfile>`, eg `ant run -Dinput=input2.upl`
 
@@ -32,6 +43,13 @@ Demo: <img src="./demo/demo1.png"></img>
 <h2>Grammar</h2>
 
 The (current) grammar is in [context-free-grammar.pdf](./context-free-grammar.pdf)
+
+<h2>Main feature</h2>
+
+- Use both top down and bottom up, with bottom up is fully automatic*
+- Also use automatic parser generator Cup
+
+Note: *With hardcoded grammar & SDT
 
 <h2>Group member</h2>
 

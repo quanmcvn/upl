@@ -1,5 +1,6 @@
 package upl.parser.parser.automatic;
 
+import upl.CompileTimeError;
 import upl.Main;
 import upl.lexer.Lexer;
 import upl.lexer.Token;
@@ -36,10 +37,15 @@ public class CupParserWrapper implements Parser {
 			e.printStackTrace();
 		}
 		
+		
 		Statements program = parser.program;
 		ContextChecker contextChecker = new ContextChecker(program);
-		program = contextChecker.check();
-		new TypeChecker().check(program);
+		try {
+			program = contextChecker.check();
+			new TypeChecker().check(program);
+		} catch (CompileTimeError error) {
+			// ignore
+		}
 		
 		this.environment = contextChecker.getEnvironment();
 		return program;

@@ -734,7 +734,7 @@ class CUP$CupParser$actions {
 		Location statementsxleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)).xleft;
 		Location statementsxright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)).xright;
 		Statements statements = (Statements)((java_cup.runtime.Symbol) CUP$CupParser$stack.elementAt(CUP$CupParser$top-1)).value;
-		 program = statements; /* System.out.println((new TextBox()).print(program)); */ 
+		 program = statements; /* System.out.println("hello from Cup"); */ 
               CUP$CupParser$result = parser.getSymbolFactory().newSymbol("Program",0, ((java_cup.runtime.Symbol)CUP$CupParser$stack.elementAt(CUP$CupParser$top-2)), ((java_cup.runtime.Symbol)CUP$CupParser$stack.peek()), RESULT);
             }
           return CUP$CupParser$result;
